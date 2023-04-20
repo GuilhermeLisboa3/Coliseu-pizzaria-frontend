@@ -1,4 +1,4 @@
-import { RequiredValidation, ValidationBuilder } from '@/application/validation'
+import { EmailValidation, RequiredValidation, ValidationBuilder } from '@/application/validation'
 
 import faker from 'faker'
 
@@ -13,5 +13,11 @@ describe('ValidationBuilder', () => {
     const validators = ValidationBuilder.of(fieldName).required().build()
 
     expect(validators).toStrictEqual([new RequiredValidation(fieldName)])
+  })
+
+  it('should return a EmailValidation if email() is call', () => {
+    const validators = ValidationBuilder.of(fieldName).email().build()
+
+    expect(validators).toStrictEqual([new EmailValidation(fieldName)])
   })
 })
