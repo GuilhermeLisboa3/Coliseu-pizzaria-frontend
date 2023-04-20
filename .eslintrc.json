@@ -3,6 +3,7 @@
   "parserOptions": { "project": "./tsconfig-eslint.json" },
   "rules": {
     "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/strict-boolean-expressions": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }
