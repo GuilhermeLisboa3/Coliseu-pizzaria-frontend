@@ -1,5 +1,5 @@
 import { type HttpClient } from '@/domain/contracts/http'
-import { FieldInUseError } from '@/domain/errors'
+import { FieldInUseError, UnexpectedError } from '@/domain/errors'
 
 type Setup = (url: string, httpClient: HttpClient) => AddAccount
 type Input = { name: string, email: string, password: string }
@@ -9,7 +9,8 @@ export const AddAccountUseCase: Setup = (url, httpClient) => async ({ email, nam
   const { statusCode } = await httpClient.request({ url, method: 'post', body: { email, name, password } })
 
   switch (statusCode) {
+    case 200: return undefined
     case 400: throw new FieldInUseError('email')
-    default: return undefined
+    default: throw new UnexpectedError()
   }
 }
