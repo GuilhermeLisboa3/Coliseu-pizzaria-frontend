@@ -1,13 +1,15 @@
-import { EmailValidation, LengthValidation, RequiredValidation, ValidationBuilder } from '@/application/validation'
+import { CompareValidation, EmailValidation, LengthValidation, RequiredValidation, ValidationBuilder } from '@/application/validation'
 
 import faker from 'faker'
 
 describe('ValidationBuilder', () => {
   let fieldName: string
+  let fieldToCompare: string
   let fieldLength: number
 
   beforeAll(() => {
     fieldName = faker.database.column()
+    fieldToCompare = faker.database.column()
     fieldLength = faker.datatype.number()
   })
 
@@ -27,5 +29,11 @@ describe('ValidationBuilder', () => {
     const validators = ValidationBuilder.of(fieldName).length(fieldLength).build()
 
     expect(validators).toStrictEqual([new LengthValidation(fieldName, fieldLength)])
+  })
+
+  it('should return a CompareValidation if sameAs() is call', () => {
+    const validators = ValidationBuilder.of(fieldName).sameAs(fieldToCompare).build()
+
+    expect(validators).toStrictEqual([new CompareValidation(fieldName, fieldToCompare)])
   })
 })
