@@ -1,4 +1,4 @@
-import { type FieldValidator, RequiredValidation, EmailValidation, LengthValidation } from '.'
+import { type FieldValidator, RequiredValidation, EmailValidation, LengthValidation, CompareValidation } from '.'
 
 export class ValidationBuilder {
   private constructor (private readonly fieldName: string, private readonly validators: FieldValidator[] = []) {}
@@ -19,6 +19,11 @@ export class ValidationBuilder {
 
   length (length: number): ValidationBuilder {
     this.validators.push(new LengthValidation(this.fieldName, length))
+    return this
+  }
+
+  sameAs (fieldToCompare: string): ValidationBuilder {
+    this.validators.push(new CompareValidation(this.fieldName, fieldToCompare))
     return this
   }
 
