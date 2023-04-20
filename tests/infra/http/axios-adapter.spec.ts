@@ -6,11 +6,15 @@ import axios from 'axios'
 jest.mock('axios')
 
 describe('AxiosAdapter', () => {
-  it('should call axios with correct value', async () => {
-    const fakeAxios = axios as jest.Mocked<typeof axios>
-    const { method, body, url } = httpClientParams
-    const sut = new AxiosAdapter()
+  const fakeAxios = axios as jest.Mocked<typeof axios>
+  const { method, body, url } = httpClientParams
+  let sut: AxiosAdapter
 
+  beforeEach(() => {
+    sut = new AxiosAdapter()
+  })
+
+  it('should call axios with correct value', async () => {
     await sut.request({ method, body, url })
 
     expect(fakeAxios).toHaveBeenCalledWith({ method, data: body, url })
