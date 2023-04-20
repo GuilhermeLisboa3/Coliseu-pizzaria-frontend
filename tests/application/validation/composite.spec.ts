@@ -16,11 +16,19 @@ describe('ValidationComposite', () => {
     value = faker.random.word()
     validator1 = mock({ field: fieldName })
     validator2 = mock({ field: fieldName })
+    validator1.validate.mockReturnValue(undefined)
+    validator2.validate.mockReturnValue(undefined)
     validators = [validator1, validator2]
   })
 
   beforeEach(() => {
     sut = ValidationComposite.build(validators)
+  })
+
+  it('should return undefined on success', () => {
+    const validate = sut.validate(fieldName, { [fieldName]: value })
+
+    expect(validate).toBeFalsy()
   })
 
   it('should return first error if any Validator fails', () => {
