@@ -1,4 +1,4 @@
-import { type FieldValidator, RequiredValidation } from '.'
+import { type FieldValidator, RequiredValidation, EmailValidation } from '.'
 
 export class ValidationBuilder {
   private constructor (private readonly fieldName: string, private readonly validators: FieldValidator[] = []) {}
@@ -9,6 +9,11 @@ export class ValidationBuilder {
 
   required (): ValidationBuilder {
     this.validators.push(new RequiredValidation(this.fieldName))
+    return this
+  }
+
+  email (): ValidationBuilder {
+    this.validators.push(new EmailValidation(this.fieldName))
     return this
   }
 
