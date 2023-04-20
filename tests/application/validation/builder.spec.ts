@@ -1,12 +1,14 @@
-import { EmailValidation, RequiredValidation, ValidationBuilder } from '@/application/validation'
+import { EmailValidation, LengthValidation, RequiredValidation, ValidationBuilder } from '@/application/validation'
 
 import faker from 'faker'
 
 describe('ValidationBuilder', () => {
   let fieldName: string
+  let fieldLength: number
 
   beforeAll(() => {
     fieldName = faker.database.column()
+    fieldLength = faker.datatype.number()
   })
 
   it('should return a RequiredValidation if required() is call', () => {
@@ -19,5 +21,11 @@ describe('ValidationBuilder', () => {
     const validators = ValidationBuilder.of(fieldName).email().build()
 
     expect(validators).toStrictEqual([new EmailValidation(fieldName)])
+  })
+
+  it('should return a LengthValidation if length() is call', () => {
+    const validators = ValidationBuilder.of(fieldName).length(fieldLength).build()
+
+    expect(validators).toStrictEqual([new LengthValidation(fieldName, fieldLength)])
   })
 })
