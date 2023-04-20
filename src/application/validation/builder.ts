@@ -1,4 +1,4 @@
-import { type FieldValidator, RequiredValidation, EmailValidation } from '.'
+import { type FieldValidator, RequiredValidation, EmailValidation, LengthValidation } from '.'
 
 export class ValidationBuilder {
   private constructor (private readonly fieldName: string, private readonly validators: FieldValidator[] = []) {}
@@ -14,6 +14,11 @@ export class ValidationBuilder {
 
   email (): ValidationBuilder {
     this.validators.push(new EmailValidation(this.fieldName))
+    return this
+  }
+
+  length (length: number): ValidationBuilder {
+    this.validators.push(new LengthValidation(this.fieldName, length))
     return this
   }
 
