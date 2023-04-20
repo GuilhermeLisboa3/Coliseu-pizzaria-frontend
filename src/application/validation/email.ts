@@ -1,7 +1,7 @@
 import { InvalidFieldError } from './errors'
-import { type FieldValidation } from './field-validation'
+import { type FieldValidator } from './field-validator'
 
-export class EmailValidation implements FieldValidation {
+export class EmailValidation implements FieldValidator {
   constructor (readonly field: string) {}
 
   validate (input: object): Error | undefined {

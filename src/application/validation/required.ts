@@ -1,7 +1,7 @@
 import { RequiredFieldError } from './errors'
-import { type FieldValidation } from './field-validation'
+import { type FieldValidator } from './field-validator'
 
-export class RequiredValidation implements FieldValidation {
+export class RequiredValidation implements FieldValidator {
   constructor (readonly field: string) {}
 
   validate (input: object): Error | undefined {
