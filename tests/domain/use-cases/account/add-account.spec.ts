@@ -12,7 +12,7 @@ describe('AddAccountUseCase', () => {
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200 })
+    httpClient.request.mockResolvedValue({ statusCode: 200, data: true })
   })
 
   beforeEach(() => {
@@ -40,5 +40,11 @@ describe('AddAccountUseCase', () => {
     const promise = sut({ name, email, password })
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return true if HttpClient return 200', async () => {
+    const result = await sut({ name, email, password })
+
+    expect(result).toBeTruthy()
   })
 })
