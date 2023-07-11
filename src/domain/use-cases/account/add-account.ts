@@ -7,10 +7,10 @@ type Output = boolean
 export type AddAccount = (input: Input) => Promise<Output>
 
 export const AddAccountUseCase: Setup = (url, httpClient) => async ({ email, name, password }) => {
-  const { statusCode, data } = await httpClient.request({ url, method: 'post', body: { email, name, password } })
+  const { statusCode } = await httpClient.request({ url, method: 'post', body: { email, name, password } })
 
   switch (statusCode) {
-    case 200: return data!
+    case 201: return true
     case 400: throw new FieldInUseError('email')
     default: throw new UnexpectedError()
   }
