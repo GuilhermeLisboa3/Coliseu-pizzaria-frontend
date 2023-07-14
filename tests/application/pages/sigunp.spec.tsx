@@ -2,16 +2,18 @@ import { populateField, AccountParams } from '@/tests/mocks'
 import { SignUp } from '@/application/pages'
 import { type Validator } from '@/application/validation'
 
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { mock } from 'jest-mock-extended'
 import React from 'react'
 
 describe('SignUp', () => {
   const { name, email, password, passwordConfirmation, error } = AccountParams
   const validator = mock<Validator>()
+  const addAccount = jest.fn()
+
   const makeSut = (): void => {
     render(
-      <SignUp validation={validator}/>
+      <SignUp validation={validator} addAccount={addAccount}/>
     )
   }
 
@@ -20,6 +22,11 @@ describe('SignUp', () => {
     populateField('email', email)
     populateField('password', password)
     populateField('passwordConfirmation', passwordConfirmation)
+  }
+
+  const simulateSubmit = (): void => {
+    populateFields()
+    fireEvent.click(screen.getByRole('button'))
   }
 
   it('should load with correct initial state', () => {
@@ -49,5 +56,13 @@ describe('SignUp', () => {
     populateFields()
 
     expect(screen.getByRole('button')).toBeDisabled()
+  })
+
+  it('should call addAccount with correct values', () => {
+    makeSut()
+
+    simulateSubmit()
+
+    expect(addAccount).toHaveBeenCalledWith({ name, email, password })
   })
 })
