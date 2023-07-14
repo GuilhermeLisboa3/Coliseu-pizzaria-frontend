@@ -6,7 +6,7 @@ type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>
   setState: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const Input: React.FC<Props> = ({ name, placeholder, value, setState, ...props }): JSX.Element => {
+export const Input: React.FC<Props> = ({ name, placeholder, value, setState, type, ...props }): JSX.Element => {
   return (
   <>
     <Container>
@@ -15,7 +15,7 @@ export const Input: React.FC<Props> = ({ name, placeholder, value, setState, ...
       placeholder=" "
       id={name}
       autoComplete="off"
-      type='text'
+      type={type}
       value={value}
       data-testid={name}
       onChange={e => { setState(e.target.value) } }

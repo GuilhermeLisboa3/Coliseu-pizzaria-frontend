@@ -12,6 +12,7 @@ describe('SignUpValidationFactory', () => {
       new RequiredValidation('password'),
       new LengthValidation('password', 5),
       new RequiredValidation('passwordConfirmation'),
+      new LengthValidation('passwordConfirmation', 5),
       new CompareValidation('passwordConfirmation', 'password')
     ]))
   })
