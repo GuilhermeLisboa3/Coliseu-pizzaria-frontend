@@ -8,6 +8,7 @@
     "@typescript-eslint/no-invalid-void-type": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
     "@next/next/no-img-element": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"

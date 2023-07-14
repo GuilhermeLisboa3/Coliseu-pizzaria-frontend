@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react'
 type Props = { validation: Validator, addAccount: AddAccount }
 
 export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element => {
+  const [loading, setLoading] = useState(false)
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState<string | undefined>('')
   const [email, setEmail] = useState('')
@@ -26,6 +27,8 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
+    if (loading || nameError || emailError || passwordError || passwordConfirmationError) return
+    setLoading(true)
     await addAccount({ name, email, password })
   }
 
