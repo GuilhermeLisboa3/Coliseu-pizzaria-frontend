@@ -1,7 +1,9 @@
-import { Roboto } from 'next/font/google'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-toastify/dist/ReactToastify.css'
+import { Roboto } from 'next/font/google'
 import { GlobalStyle } from '@/application/styles'
 import { StyledComponentsRegistry } from '@/main/config'
+import { ToastContainer } from 'react-toastify'
 
 import React from 'react'
 
@@ -17,6 +19,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }): JSX.Element =>
     <html lang="pt-br" className={roboto.variable}>
         <body>
           <GlobalStyle/>
+          <ToastContainer autoClose={3000} position='top-right' theme='colored'/>
           <StyledComponentsRegistry>
             { children }
           </StyledComponentsRegistry>
