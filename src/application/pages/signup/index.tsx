@@ -1,14 +1,15 @@
 import { Container, Hyperlink } from './style'
 import { Input, Button, Toast } from '@/application/components'
 import { type Validator } from '@/application/validation'
+import { type AddAccount } from '@/domain/use-cases/account'
 import imgSignup from '@/application/assets/img-signup.jpg'
 import logo from '@/application/assets/logo.png'
 
 import React, { useEffect, useState } from 'react'
 
-type Props = { validation: Validator }
+type Props = { validation: Validator, addAccount: AddAccount }
 
-export const SignUp: React.FC<Props> = ({ validation }): JSX.Element => {
+export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element => {
   const [name, setName] = useState('')
   const [nameError, setNameError] = useState<string | undefined>('')
   const [email, setEmail] = useState('')
@@ -23,6 +24,11 @@ export const SignUp: React.FC<Props> = ({ validation }): JSX.Element => {
   useEffect(() => { setPasswordError(validation.validate('password', { password })) }, [password])
   useEffect(() => { setPasswordConfirmationError(validation.validate('passwordConfirmation', { password, passwordConfirmation })) }, [passwordConfirmation])
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    await addAccount({ name, email, password })
+  }
+
   return (
     <>
       <Container>
@@ -30,7 +36,7 @@ export const SignUp: React.FC<Props> = ({ validation }): JSX.Element => {
           <img src={imgSignup.src} alt="" />
           <div>
             <img src={logo.src} alt="logo" />
-            <form action="">
+            <form onClick={handleSubmit}>
               <Input placeholder="Name" type='text' name='name' setState={setName}/>
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>
               <Input placeholder="Senha" type='password' name='password' setState={setPassword}/>
