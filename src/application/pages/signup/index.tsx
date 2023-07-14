@@ -10,14 +10,18 @@ type Props = { validation: Validator }
 
 export const SignUp: React.FC<Props> = ({ validation }): JSX.Element => {
   const [name, setName] = useState('')
+  const [nameError, setNameError] = useState<string | undefined>('')
   const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState<string | undefined>('')
   const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState<string | undefined>('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState<string | undefined>('')
 
-  useEffect(() => { validation.validate('name', { name }) }, [name])
-  useEffect(() => { validation.validate('email', { email }) }, [email])
-  useEffect(() => { validation.validate('password', { password }) }, [password])
-  useEffect(() => { validation.validate('passwordConfirmation', { password, passwordConfirmation }) }, [passwordConfirmation])
+  useEffect(() => { setNameError(validation.validate('name', { name })) }, [name])
+  useEffect(() => { setEmailError(validation.validate('email', { email })) }, [email])
+  useEffect(() => { setPasswordError(validation.validate('password', { password })) }, [password])
+  useEffect(() => { setPasswordConfirmationError(validation.validate('passwordConfirmation', { password, passwordConfirmation })) }, [passwordConfirmation])
 
   return (
     <>
@@ -31,7 +35,7 @@ export const SignUp: React.FC<Props> = ({ validation }): JSX.Element => {
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>
               <Input placeholder="Senha" type='password' name='password' setState={setPassword}/>
               <Input placeholder="Confirma senha" type='password' name='passwordConfirmation' setState={setPasswordConfirmation}/>
-              <Button type='submit' disabled={true}>Cadastre-se</Button>
+              <Button type='submit' disabled={!!nameError || !!emailError || !!passwordError || !!passwordConfirmationError}>Cadastre-se</Button>
             </form>
             <p>Já tem uma conta? <Hyperlink href={'/login'}>Entrar</Hyperlink></p>
           </div>
