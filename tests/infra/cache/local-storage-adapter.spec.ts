@@ -26,5 +26,11 @@ describe('LocalStorageAdapter', () => {
 
       expect(localStorage.setItem).toHaveBeenCalledWith(key, JSON.stringify(value))
     })
+
+    it('should call localStorage.removeItem if value is null', async () => {
+      sut.set({ key, value: null as any })
+
+      expect(localStorage.removeItem).toHaveBeenCalledWith(key)
+    })
   })
 })
