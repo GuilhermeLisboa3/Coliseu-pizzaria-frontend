@@ -7,7 +7,7 @@ import { mock } from 'jest-mock-extended'
 import React from 'react'
 
 describe('SignUp', () => {
-  const { name, email, password, passwordConfirmation } = AccountParams
+  const { name, email, password, passwordConfirmation, error } = AccountParams
   const validator = mock<Validator>()
   const makeSut = (): void => {
     render(
@@ -23,6 +23,8 @@ describe('SignUp', () => {
   }
 
   it('should load with correct initial state', () => {
+    validator.validate.mockReturnValueOnce(error)
+
     makeSut()
 
     expect(screen.getByText('Cadastre-se')).toBeTruthy()
@@ -38,5 +40,14 @@ describe('SignUp', () => {
     expect(validator.validate).toHaveBeenCalledWith('email', { email })
     expect(validator.validate).toHaveBeenCalledWith('password', { password })
     expect(validator.validate).toHaveBeenCalledWith('passwordConfirmation', { password, passwordConfirmation })
+  })
+
+  it('should disable button if form if Validation fails', () => {
+    makeSut()
+    validator.validate.mockReturnValueOnce(error).mockReturnValueOnce(error).mockReturnValueOnce(error).mockReturnValueOnce(error)
+
+    populateFields()
+
+    expect(screen.getByRole('button')).toBeDisabled()
   })
 })
