@@ -1,10 +1,12 @@
 import { populateField, AccountParams } from '@/tests/mocks'
 import { SignUp } from '@/application/pages'
 import { type Validator } from '@/application/validation'
+import { FieldInUseError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mock } from 'jest-mock-extended'
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
 
 describe('SignUp', () => {
   const { name, email, password, passwordConfirmation, error } = AccountParams
@@ -13,7 +15,10 @@ describe('SignUp', () => {
 
   const makeSut = (): void => {
     render(
-      <SignUp validation={validator} addAccount={addAccount}/>
+      <>
+        <ToastContainer/>
+        <SignUp validation={validator} addAccount={addAccount}/>
+      </>
     )
   }
 
@@ -84,5 +89,14 @@ describe('SignUp', () => {
     fireEvent.submit(screen.getByTestId('form'))
 
     expect(addAccount).not.toHaveBeenCalled()
+  })
+
+  it('should show alert error if AddAccount fails', async () => {
+    makeSut()
+    addAccount.mockRejectedValueOnce(new FieldInUseError('email'))
+
+    simulateSubmit()
+
+    expect(await screen.findByText(new FieldInUseError('email').message)).toBeInTheDocument()
   })
 })
