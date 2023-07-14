@@ -1,5 +1,5 @@
 import { Container, Hyperlink } from './style'
-import { Input, Button, Spinner, Toast } from '@/application/components'
+import { Input, Button, Toast } from '@/application/components'
 import imgSignup from '@/application/assets/img-signup.jpg'
 import logo from '@/application/assets/logo.png'
 
@@ -18,7 +18,7 @@ export const SignUp = (): JSX.Element => {
               <Input placeholder="Email" type='email' name='email'/>
               <Input placeholder="Senha" type='password' name='password'/>
               <Input placeholder="Confirma senha" type='password' name='passwordConfirmation'/>
-              <Button type='submit' disabled={true}><Spinner/></Button>
+              <Button type='submit' disabled={true}>Cadastre-se</Button>
             </form>
             <p>Já tem uma conta? <Hyperlink href={'/login'}>Entrar</Hyperlink></p>
           </div>
