@@ -71,8 +71,18 @@ describe('SignUp', () => {
 
     simulateSubmit()
     fireEvent.click(screen.getByRole('button'))
-    await waitFor(() => screen.getByText('Entrar'))
+    await waitFor(() => screen.getByTestId('form'))
 
     expect(addAccount).toHaveBeenCalledTimes(1)
+  })
+
+  it('should not call AddAccount if form is invalid', () => {
+    makeSut()
+    validator.validate.mockReturnValueOnce(error)
+
+    populateFields()
+    fireEvent.submit(screen.getByTestId('form'))
+
+    expect(addAccount).not.toHaveBeenCalled()
   })
 })
