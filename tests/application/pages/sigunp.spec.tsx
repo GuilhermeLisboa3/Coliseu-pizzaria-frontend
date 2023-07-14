@@ -99,4 +99,12 @@ describe('SignUp', () => {
 
     expect(await screen.findByText(new FieldInUseError('email').message)).toBeInTheDocument()
   })
+
+  it('should show spinner if click button', async () => {
+    makeSut()
+
+    simulateSubmit()
+
+    expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+  })
 })
