@@ -1,5 +1,5 @@
 import { Container, Hyperlink } from './style'
-import { Input, Button, Spinner } from '@/application/components'
+import { Input, Button, Spinner, Toast } from '@/application/components'
 import imgSignup from '@/application/assets/img-signup.jpg'
 import logo from '@/application/assets/logo.png'
 
@@ -24,6 +24,7 @@ export const SignUp = (): JSX.Element => {
           </div>
         </main>
       </Container>
+      <Toast message='error'/>
     </>
   )
 }
