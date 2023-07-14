@@ -8,8 +8,12 @@ import { mock } from 'jest-mock-extended'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 
+jest.mock('next/navigation')
+
 describe('SignUp', () => {
   const { name, email, password, passwordConfirmation, error } = AccountParams
+  const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
+  const router = { push: jest.fn() }
   const validator = mock<Validator>()
   const addAccount = jest.fn()
 
@@ -21,6 +25,10 @@ describe('SignUp', () => {
       </>
     )
   }
+
+  beforeAll(() => {
+    useRouter.mockReturnValue(router)
+  })
 
   const populateFields = (): void => {
     populateField('name', name)
@@ -106,5 +114,14 @@ describe('SignUp', () => {
     simulateSubmit()
 
     expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+  })
+
+  it('should call router.push if addAccount is successful', async () => {
+    makeSut()
+
+    simulateSubmit()
+    await waitFor(() => screen.getByTestId('form'))
+
+    expect(router.push).toHaveBeenCalledWith('/login')
   })
 })
