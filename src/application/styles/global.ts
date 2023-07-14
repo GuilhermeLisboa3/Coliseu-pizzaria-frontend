@@ -28,7 +28,7 @@ export const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background: ${colors.red};
+    background: ${colors.redDark};
   }
 
   input[type="password"], input[type="email"], input[type="text"] {
@@ -44,6 +44,11 @@ export const GlobalStyle = createGlobalStyle`
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
     }
+  }
+
+  [disabled] {
+    opacity: 0.9;
+    cursor: not-allowed;
   }
 
 `
