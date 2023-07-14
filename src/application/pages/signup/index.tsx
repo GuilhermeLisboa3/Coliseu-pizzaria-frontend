@@ -1,5 +1,5 @@
 import { Container, Hyperlink } from './style'
-import { Input, Button } from '@/application/components'
+import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type AddAccount } from '@/domain/use-cases/account'
 import imgSignup from '@/application/assets/img-signup.jpg'
@@ -51,7 +51,9 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>
               <Input placeholder="Senha" type='password' name='password' setState={setPassword}/>
               <Input placeholder="Confirma senha" type='password' name='passwordConfirmation' setState={setPasswordConfirmation}/>
-              <Button type='submit' disabled={!!nameError || !!emailError || !!passwordError || !!passwordConfirmationError}>Cadastre-se</Button>
+              <Button type='submit' disabled={!!nameError || !!emailError || !!passwordError || !!passwordConfirmationError}>
+                { loading ? <Spinner/> : 'Cadastre-se' }
+              </Button>
             </form>
             <p>Já tem uma conta? <Hyperlink href={'/login'}>Entrar</Hyperlink></p>
           </div>
