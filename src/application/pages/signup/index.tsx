@@ -6,11 +6,13 @@ import imgSignup from '@/application/assets/img-signup.jpg'
 import logo from '@/application/assets/logo.png'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 type Props = { validation: Validator, addAccount: AddAccount }
 
 export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element => {
+  const { push } = useRouter()
   const [loading, setLoading] = useState(false)
 
   const [name, setName] = useState('')
@@ -33,6 +35,7 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
       if (loading || nameError || emailError || passwordError || passwordConfirmationError) return
       setLoading(true)
       await addAccount({ name, email, password })
+      push('/login')
     } catch (error: any) {
       setLoading(false)
       toast.error(error.message)

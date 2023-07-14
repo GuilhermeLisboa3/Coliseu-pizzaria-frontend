@@ -9,6 +9,7 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/no-var-requires": "off",
     "@next/next/no-img-element": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
