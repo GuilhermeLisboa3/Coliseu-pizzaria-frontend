@@ -13,7 +13,7 @@ describe('LengthValidation', () => {
   })
 
   it('should return error if value is empty', () => {
-    const sut = new LengthValidation(fieldName, 1)
+    const sut = new LengthValidation(fieldName, 9)
 
     const error = sut.validate({ [fieldName]: value })
 

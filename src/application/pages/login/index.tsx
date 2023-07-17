@@ -36,6 +36,7 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
       setCurrentAccount(account)
       push('/')
     } catch (error: any) {
+      setLoading(false)
       toast.error(error.message)
     }
   }
