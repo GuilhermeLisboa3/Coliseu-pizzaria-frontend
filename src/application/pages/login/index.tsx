@@ -45,7 +45,9 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
     <>
       <AuthenticationLayout>
         <main>
-          <img src={imgLogin.src} alt="" />
+          <aside>
+            <img src={imgLogin.src} alt="" />
+          </aside>
           <div>
             <img src={logo.src} alt="logo" />
             <form onSubmit={handleSubmit} data-testid='form'>

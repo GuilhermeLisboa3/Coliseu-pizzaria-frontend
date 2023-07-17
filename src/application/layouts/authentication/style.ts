@@ -17,9 +17,31 @@ export const Container = styled.div`
     height: 600px;
     padding: 0;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    aside {
       img {
       width: 100%;
       height: 600px; 
+        @media (max-width: 838px) {
+          display: none;
+        }
+      }
+    }
+
+    @media (max-width: 1102px) {
+      width: 95%;
+    }
+
+    @media (max-width: 838px) {
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 390px) {
+      height: 500px;
     }
   }
 
@@ -33,10 +55,22 @@ export const Container = styled.div`
       height: 160px;
       margin: 0 auto;
       cursor: pointer;
+      @media (max-width: 390px) {
+        width: 250px;
+        height: 130px;
+      }
     }
     form {
       width: 70%;
       margin: 0 auto;
+
+      @media (max-width: 838px) {
+        width: 95%;
+      }
+
+      @media (max-width: 390px) {
+        width: 90%;
+      }
 
       button {
         margin: 2rem auto 0.7rem;
@@ -47,6 +81,9 @@ export const Container = styled.div`
         text-align: center;
         font-weight: 400;
         color: ${colors.black};
+        @media (max-width: 390px) {
+          font-size: 0.9rem;
+        }
 
         a {
           color: ${colors.redDark};

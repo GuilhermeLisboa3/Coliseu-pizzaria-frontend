@@ -48,7 +48,9 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
     <>
       <AuthenticationLayout>
         <main>
-          <img src={imgSignup.src} alt="" />
+          <aside>
+            <img src={imgSignup.src} alt="" />
+          </aside>
           <div>
             <img src={logo.src} alt="logo" />
             <form onSubmit={handleSubmit} data-testid='form'>
