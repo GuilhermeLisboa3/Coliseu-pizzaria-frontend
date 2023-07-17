@@ -1,6 +1,5 @@
 'use client'
 import { colors } from '@/application/styles'
-import Link from 'next/link'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -49,24 +48,15 @@ export const Container = styled.div`
         font-weight: 400;
         color: ${colors.black};
 
-        Link {
+        a {
           color: ${colors.redDark};
           font-weight: 500;
           cursor: pointer;
+          text-decoration: none;
           &:hover {
             opacity: 0.9;
           }
         }
       }
-  }
-`
-
-export const Hyperlink = styled(Link)`
-  color: ${colors.redDark};
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.9;
   }
 `

@@ -1,10 +1,11 @@
 'use client'
-import { Container, Hyperlink } from './style'
+import { Authentication } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
 import imgLogin from '@/application/assets/img-login.jpg'
 import logo from '@/application/assets/logo.png'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 
 export const Login: React.FC = (): JSX.Element => {
   const [loading] = useState(false)
@@ -16,7 +17,7 @@ export const Login: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <Container>
+      <Authentication>
         <main>
           <img src={imgLogin.src} alt="" />
           <div>
@@ -28,10 +29,10 @@ export const Login: React.FC = (): JSX.Element => {
                 { loading ? <Spinner/> : 'Entrar' }
               </Button>
             </form>
-            <p>Ainda não possui uma conta? <Hyperlink href={'/signup'}>Crie uma!</Hyperlink></p>
+            <p>Ainda não possui uma conta? <Link href={'/signup'}>Crie uma!</Link></p>
           </div>
         </main>
-      </Container>
+      </Authentication>
     </>
   )
 }

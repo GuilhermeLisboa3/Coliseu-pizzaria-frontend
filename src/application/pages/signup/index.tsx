@@ -1,5 +1,5 @@
 'use client'
-import { Container, Hyperlink } from './style'
+import { Authentication } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type AddAccount } from '@/domain/use-cases/account'
@@ -9,6 +9,7 @@ import logo from '@/application/assets/logo.png'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import Link from 'next/link'
 
 type Props = { validation: Validator, addAccount: AddAccount }
 
@@ -45,7 +46,7 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
 
   return (
     <>
-      <Container>
+      <Authentication>
         <main>
           <img src={imgSignup.src} alt="" />
           <div>
@@ -59,10 +60,10 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
                 { loading ? <Spinner/> : 'Cadastre-se' }
               </Button>
             </form>
-            <p>Já tem uma conta? <Hyperlink href={'/login'}>Entrar</Hyperlink></p>
+            <p>Já tem uma conta? <Link href={'/login'}>Entrar</Link></p>
           </div>
         </main>
-      </Container>
+      </Authentication>
     </>
   )
 }
