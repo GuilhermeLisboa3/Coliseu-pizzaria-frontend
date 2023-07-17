@@ -1,3 +1,4 @@
+'use client'
 import { Container, Hyperlink } from './style'
 import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
