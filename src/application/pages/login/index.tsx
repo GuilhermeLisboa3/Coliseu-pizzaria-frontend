@@ -11,9 +11,7 @@ export const Login: React.FC = (): JSX.Element => {
   const [loading] = useState(false)
 
   const [, setEmail] = useState('')
-  const [emailError] = useState<string | undefined>('')
   const [, setPassword] = useState('')
-  const [passwordError] = useState<string | undefined>('')
 
   return (
     <>
@@ -25,7 +23,7 @@ export const Login: React.FC = (): JSX.Element => {
             <form data-testid='form'>
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>
               <Input placeholder="Senha" type='password' name='password' setState={setPassword}/>
-              <Button type='submit' disabled={!!emailError || !!passwordError}>
+              <Button type='submit' disabled={true}>
                 { loading ? <Spinner/> : 'Entrar' }
               </Button>
             </form>
