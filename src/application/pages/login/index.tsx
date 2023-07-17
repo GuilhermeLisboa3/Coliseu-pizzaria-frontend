@@ -12,7 +12,7 @@ import Link from 'next/link'
 type Props = { validation: Validator, authentication: Authentication }
 
 export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Element => {
-  const [loading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState<string | undefined>('')
@@ -24,6 +24,8 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
+    if (loading || emailError || passwordError) return
+    setLoading(true)
     await authentication({ email, password })
   }
 
