@@ -3,16 +3,20 @@ import { AuthenticationLayout } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type Authentication } from '@/domain/use-cases/account'
+import { AccountContext } from '@/application/contexts'
 import imgLogin from '@/application/assets/img-login.jpg'
 import logo from '@/application/assets/logo.png'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 type Props = { validation: Validator, authentication: Authentication }
 
 export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Element => {
+  const { setCurrentAccount } = useContext(AccountContext)
+  const { push } = useRouter()
   const [loading, setLoading] = useState(false)
 
   const [email, setEmail] = useState('')
@@ -28,7 +32,9 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
     try {
       if (loading || emailError || passwordError) return
       setLoading(true)
-      await authentication({ email, password })
+      const account = await authentication({ email, password })
+      setCurrentAccount(account)
+      push('/')
     } catch (error: any) {
       toast.error(error.message)
     }
