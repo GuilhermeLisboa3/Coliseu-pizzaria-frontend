@@ -95,4 +95,12 @@ describe('Login', () => {
 
     expect(await screen.findByText(new InvalidCredentialsError().message)).toBeInTheDocument()
   })
+
+  it('should show spinner if click button', async () => {
+    makeSut()
+
+    simulateSubmit()
+
+    expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+  })
 })
