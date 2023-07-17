@@ -1,9 +1,11 @@
 import { Login } from '@/application/pages'
 import { populateField, AccountParams } from '@/tests/mocks'
 import { type Validator } from '@/application/validation'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mock } from 'jest-mock-extended'
+import { ToastContainer } from 'react-toastify'
 import React from 'react'
 
 describe('Login', () => {
@@ -14,6 +16,7 @@ describe('Login', () => {
   const makeSut = (): void => {
     render(
       <>
+        <ToastContainer/>
         <Login validation={validator} authentication={authentication}/>
       </>
     )
@@ -82,5 +85,14 @@ describe('Login', () => {
     fireEvent.submit(screen.getByTestId('form'))
 
     expect(authentication).not.toHaveBeenCalled()
+  })
+
+  it('should show alert error if authentication fails', async () => {
+    makeSut()
+    authentication.mockRejectedValueOnce(new InvalidCredentialsError())
+
+    simulateSubmit()
+
+    expect(await screen.findByText(new InvalidCredentialsError().message)).toBeInTheDocument()
   })
 })
