@@ -2,7 +2,7 @@ import { Login } from '@/application/pages'
 import { populateField, AccountParams } from '@/tests/mocks'
 import { type Validator } from '@/application/validation'
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { mock } from 'jest-mock-extended'
 import React from 'react'
 
@@ -62,5 +62,15 @@ describe('Login', () => {
     simulateSubmit()
 
     expect(authentication).toHaveBeenCalledWith({ email, password })
+  })
+
+  it('should call authentication only once', async () => {
+    makeSut()
+
+    simulateSubmit()
+    fireEvent.click(screen.getByRole('button'))
+    await waitFor(() => screen.getByTestId('form'))
+
+    expect(authentication).toHaveBeenCalledTimes(1)
   })
 })
