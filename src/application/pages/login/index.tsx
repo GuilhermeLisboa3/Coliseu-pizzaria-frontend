@@ -1,17 +1,23 @@
 'use client'
 import { Authentication } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
+import { type Validator } from '@/application/validation'
 import imgLogin from '@/application/assets/img-login.jpg'
 import logo from '@/application/assets/logo.png'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-export const Login: React.FC = (): JSX.Element => {
+type Props = { validation: Validator }
+
+export const Login: React.FC<Props> = ({ validation }): JSX.Element => {
   const [loading] = useState(false)
 
-  const [, setEmail] = useState('')
-  const [, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  useEffect(() => { validation.validate('email', { email }) }, [email])
+  useEffect(() => { validation.validate('password', { password }) }, [password])
 
   return (
     <>
