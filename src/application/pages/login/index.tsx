@@ -8,6 +8,7 @@ import logo from '@/application/assets/logo.png'
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 type Props = { validation: Validator, authentication: Authentication }
 
@@ -24,9 +25,13 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (loading || emailError || passwordError) return
-    setLoading(true)
-    await authentication({ email, password })
+    try {
+      if (loading || emailError || passwordError) return
+      setLoading(true)
+      await authentication({ email, password })
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   }
 
   return (
