@@ -1,5 +1,5 @@
 'use client'
-import { Authentication } from '@/application/layouts'
+import { AuthenticationLayout } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type AddAccount } from '@/domain/use-cases/account'
@@ -46,7 +46,7 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
 
   return (
     <>
-      <Authentication>
+      <AuthenticationLayout>
         <main>
           <img src={imgSignup.src} alt="" />
           <div>
@@ -63,7 +63,7 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
             <p>Já tem uma conta? <Link href={'/login'}>Entrar</Link></p>
           </div>
         </main>
-      </Authentication>
+      </AuthenticationLayout>
     </>
   )
 }
