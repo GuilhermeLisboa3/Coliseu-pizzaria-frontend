@@ -4,7 +4,7 @@ import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type Authentication } from '@/domain/use-cases/account'
 import { AccountContext } from '@/application/contexts'
-import imgLogin from '@/application/assets/img-login.jpg'
+import imgLogin from '@/application/assets/login/img-login.jpg'
 import logo from '@/application/assets/logo.png'
 
 import React, { useEffect, useState, useContext } from 'react'

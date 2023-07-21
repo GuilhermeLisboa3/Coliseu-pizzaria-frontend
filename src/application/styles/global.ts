@@ -26,8 +26,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
     background: ${colors.redDark};
   }
 

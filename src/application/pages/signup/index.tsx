@@ -3,7 +3,7 @@ import { AuthenticationLayout } from '@/application/layouts'
 import { Input, Button, Spinner } from '@/application/components'
 import { type Validator } from '@/application/validation'
 import { type AddAccount } from '@/domain/use-cases/account'
-import imgSignup from '@/application/assets/img-signup.jpg'
+import imgSignup from '@/application/assets/signup/img-signup.jpg'
 import logo from '@/application/assets/logo.png'
 
 import React, { useEffect, useState } from 'react'
