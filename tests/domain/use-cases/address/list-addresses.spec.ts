@@ -3,7 +3,7 @@ import { type HttpClient } from '@/domain/contracts/http'
 import { httpClientParams } from '@/tests/mocks'
 
 import { mock } from 'jest-mock-extended'
-import { InvalidCredentialsError } from '@/domain/errors'
+import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
 describe('listAddressesUseCase', () => {
   const { url } = httpClientParams
@@ -31,5 +31,13 @@ describe('listAddressesUseCase', () => {
     const promise = sut()
 
     await expect(promise).rejects.toThrow(new InvalidCredentialsError())
+  })
+
+  it('should throw UnexpectedError if HttpClient return 500', async () => {
+    httpClient.request.mockResolvedValueOnce({ statusCode: 500 })
+
+    const promise = sut()
+
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
