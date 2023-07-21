@@ -9,7 +9,9 @@ export class LocalStorageAdapter {
     }
   }
 
-  get ({ key }: GetStorage.Input): void {
-    localStorage.getItem(key)
+  get ({ key }: GetStorage.Input): GetStorage.Output {
+    const value = localStorage.getItem(key)
+
+    return JSON.parse(value!)
   }
 }
