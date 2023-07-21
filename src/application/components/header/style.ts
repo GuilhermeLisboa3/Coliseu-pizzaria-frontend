@@ -54,6 +54,7 @@ export const Section = styled(Cont)<Props>`
   }
   
   div {
+    position: relative;
     display: flex;
     gap: 10px;
     svg {
@@ -62,6 +63,24 @@ export const Section = styled(Cont)<Props>`
       &:hover {
         color: ${colors.redDark};
       }
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -2px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      background: ${colors.redDark};
+      color: ${colors.white};
+      border-radius: 100%;
+      text-align: center;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
     }
   }
 

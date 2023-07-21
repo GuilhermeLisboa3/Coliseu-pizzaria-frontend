@@ -4,7 +4,8 @@ import logo from '@/application/assets/logo.png'
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { AiOutlineUser, AiOutlineShoppingCart, AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineUser, AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
+import { PiShoppingCartSimple } from 'react-icons/pi'
 import { usePathname } from 'next/navigation'
 
 export const Header: React.FC = (): JSX.Element => {
@@ -23,7 +24,12 @@ export const Header: React.FC = (): JSX.Element => {
         <Link href={'/'} className={pathName('/menu')}>Cardápio</Link>
       </nav>
       <div>
-        <Link href={'#'}><AiOutlineShoppingCart/></Link>
+        <Link href={'#'}>
+          <div>
+            <PiShoppingCartSimple/>
+            <span>4</span>
+          </div>
+        </Link>
         <Link href={'/profile'}><AiOutlineUser/></Link>
       </div>
     </Section>
