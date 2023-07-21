@@ -1,5 +1,4 @@
 'use client'
-import '@splidejs/react-splide/css'
 
 import React from 'react'
 import { Container, Card } from './style'

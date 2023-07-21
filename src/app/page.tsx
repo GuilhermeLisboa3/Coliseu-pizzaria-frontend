@@ -1,4 +1,4 @@
-import { Home } from '@/application/pages/home'
+import { Home } from '@/application/pages'
 import React from 'react'
 
 const Page = (): JSX.Element => {

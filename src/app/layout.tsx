@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
+import '@splidejs/react-splide/css'
 import { Roboto } from 'next/font/google'
 import { GlobalStyle } from '@/application/styles'
 import { StyledComponentsRegistry } from '@/main/config'

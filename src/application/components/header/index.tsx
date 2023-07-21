@@ -14,7 +14,7 @@ export const Header: React.FC = (): JSX.Element => {
   const [visible, setVisible] = useState(false)
   return (
   <Container>
-    <Section visible={visible}>
+    <Section $visible={visible}>
       <button onClick={() => setVisible(!visible)}>
         { visible ? <AiOutlineClose/> : <AiOutlineMenu/>}
       </button>

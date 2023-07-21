@@ -3,8 +3,6 @@ import { colors } from '@/application/styles'
 import { Container as Cont } from 'reactstrap'
 import styled from 'styled-components'
 
-type Props = { visible: boolean }
-
 export const Container = styled.header`
   background-color: ${colors.primary};
   padding: 10px 0px;
@@ -14,7 +12,7 @@ export const Container = styled.header`
   }
 `
 
-export const Section = styled(Cont)<Props>`
+export const Section = styled(Cont)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -104,7 +102,7 @@ export const Section = styled(Cont)<Props>`
       justify-content: center;
       position: fixed;
       width: 100%;
-      height: ${props => (props.visible ? '100%' : '0')};
+      height: ${props => props.$visible ? '100%' : '0'};
       overflow: hidden;
       top: 0;
       left: 0;
