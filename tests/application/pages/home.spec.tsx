@@ -8,7 +8,7 @@ import React from 'react'
 describe('Home', () => {
   const makeSut = (): void => {
     render(
-      <AccountContext.Provider value={{ setCurrentAccount: jest.fn() }}>
+      <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
         <ToastContainer/>
         <Home />
       </AccountContext.Provider>

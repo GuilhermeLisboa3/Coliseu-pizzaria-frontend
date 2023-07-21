@@ -21,7 +21,7 @@ describe('Login', () => {
 
   const makeSut = (): void => {
     render(
-      <AccountContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+      <AccountContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: jest.fn() }}>
         <ToastContainer/>
         <Login validation={validator} authentication={authentication}/>
       </AccountContext.Provider>
