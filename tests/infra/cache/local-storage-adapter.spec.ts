@@ -33,4 +33,12 @@ describe('LocalStorageAdapter', () => {
       expect(localStorage.removeItem).toHaveBeenCalledWith(key)
     })
   })
+
+  describe('get()', () => {
+    it('should call localStorage.getItem with correct values', async () => {
+      sut.get({ key })
+
+      expect(localStorage.getItem).toHaveBeenCalledWith(key)
+    })
+  })
 })
