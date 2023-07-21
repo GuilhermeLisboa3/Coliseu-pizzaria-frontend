@@ -1,17 +1,18 @@
 import { type ListAddresses, listAddressesUseCase } from '@/domain/use-cases/address'
 import { type HttpClient } from '@/domain/contracts/http'
-import { httpClientParams } from '@/tests/mocks'
+import { httpClientParams, addressParams } from '@/tests/mocks'
 
 import { mock } from 'jest-mock-extended'
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
 describe('listAddressesUseCase', () => {
   const { url } = httpClientParams
+  const { active, complement, id, neighborhood, number, street, surname, zipCode } = addressParams
   let sut: ListAddresses
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200 })
+    httpClient.request.mockResolvedValue({ statusCode: 200, data: [{ active, complement, id, neighborhood, number, street, surname, zipCode }] })
   })
 
   beforeEach(() => {
@@ -39,5 +40,11 @@ describe('listAddressesUseCase', () => {
     const promise = sut()
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return address if HttpClient return 200', async () => {
+    const result = await sut()
+
+    expect(result).toEqual([{ active, complement, id, neighborhood, number, street, surname, zipCode }])
   })
 })
