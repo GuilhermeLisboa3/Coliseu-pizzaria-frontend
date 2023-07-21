@@ -40,5 +40,13 @@ describe('LocalStorageAdapter', () => {
 
       expect(localStorage.getItem).toHaveBeenCalledWith(key)
     })
+
+    it('should return value', async () => {
+      jest.spyOn(localStorage, 'getItem').mockReturnValueOnce(JSON.stringify(value))
+
+      const result = sut.get({ key })
+
+      expect(result).toEqual(value)
+    })
   })
 })
