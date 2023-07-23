@@ -2,12 +2,18 @@ import { Button } from '@/application/components'
 import { Container, Addresess } from './style'
 import { SkeletonAddress } from './components'
 import { Default } from '@/application/layouts'
+import { type ListAddresses } from '@/domain/use-cases/address'
 
 import { MdOutlineAdd } from 'react-icons/md'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
-export const Profile: React.FC = (): JSX.Element => {
+type Props = { listAddresses: ListAddresses }
+
+export const Profile: React.FC<Props> = ({ listAddresses }): JSX.Element => {
+  useState(() => {
+    listAddresses()
+  })
   return (
     <Default>
       <Container>
