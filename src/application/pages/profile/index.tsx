@@ -1,3 +1,4 @@
+'use client'
 import { Button, Error } from '@/application/components'
 import { Container, Addresess } from './style'
 import { SkeletonAddress, Address } from './components'
