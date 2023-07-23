@@ -16,10 +16,19 @@ export const Profile: React.FC<Props> = ({ listAddresses }): JSX.Element => {
   const { getCurrentAccount } = useContext(AccountContext)
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
+  const [reload, setReload] = useState(true)
+
   useEffect(() => {
     setAddresses(undefined)
     listAddresses().then(addresses => setAddresses(addresses)).catch(error => setError(error.message))
-  }, [])
+  }, [reload])
+
+  const handleReload = (): void => {
+    setAddresses([])
+    setError(undefined)
+    setReload(!reload)
+  }
+
   return (
   <Default>
     <Container>
@@ -28,7 +37,7 @@ export const Profile: React.FC<Props> = ({ listAddresses }): JSX.Element => {
       <Addresess>
         <Link href={'/profile/address'}><Button><><MdOutlineAdd/> Adicionar</></Button></Link>
         { error
-          ? <Error error={error}/>
+          ? <Error error={error} reload={handleReload}/>
           : <>{ addresses
             ? addresses.map(address => (<Address key={address.id} address={address}/>))
             : <SkeletonAddress/>
