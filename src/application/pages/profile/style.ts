@@ -30,7 +30,7 @@ export const Container = styled(Cont)`
   }
 `
 
-export const Addresess = styled.div`
+export const Addresess = styled.main`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
