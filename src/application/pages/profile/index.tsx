@@ -1,5 +1,5 @@
-import { Button } from '@/application/components'
-import { Container, Addresess, Error } from './style'
+import { Button, Error } from '@/application/components'
+import { Container, Addresess } from './style'
 import { Address, SkeletonAddress } from './components'
 import { Default } from '@/application/layouts'
 
@@ -17,10 +17,7 @@ export const Profile: React.FC = (): JSX.Element => {
           <Link href={'/profile/address'}><Button><><MdOutlineAdd/> Adicionar</></Button></Link>
           <Address/>
           <SkeletonAddress/>
-          <Error>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, maxime.</span>
-            <Button>Tentar novamente</Button>
-          </Error>
+          <Error/>
         </Addresess>
       </Container>
     </Default>
