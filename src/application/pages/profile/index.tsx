@@ -1,6 +1,6 @@
-import { Button, Error } from '@/application/components'
+import { Button } from '@/application/components'
 import { Container, Addresess } from './style'
-import { Address, SkeletonAddress } from './components'
+import { SkeletonAddress } from './components'
 import { Default } from '@/application/layouts'
 
 import { MdOutlineAdd } from 'react-icons/md'
@@ -15,9 +15,7 @@ export const Profile: React.FC = (): JSX.Element => {
         <p>Onde deseja receber seu pedido?</p>
         <Addresess>
           <Link href={'/profile/address'}><Button><><MdOutlineAdd/> Adicionar</></Button></Link>
-          <Address/>
           <SkeletonAddress/>
-          <Error/>
         </Addresess>
       </Container>
     </Default>
