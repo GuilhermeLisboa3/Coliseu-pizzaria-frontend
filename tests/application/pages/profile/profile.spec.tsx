@@ -4,6 +4,7 @@ import { AccountContext } from '@/application/contexts'
 
 import { render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
+import { UnexpectedError } from '@/domain/errors'
 
 describe('Profile', () => {
   const listAddresses = jest.fn()
@@ -46,5 +47,14 @@ describe('Profile', () => {
     expect(await screen.findByText(`${street}, ${number}, ${complement}`)).toBeInTheDocument()
     expect(await screen.findByText(`${neighborhood}, ${zipCode}`)).toBeInTheDocument()
     expect(await screen.findByText(`Olá, ${name}`)).toBeInTheDocument()
+  })
+
+  it('should render error on UnexpectedError', async () => {
+    listAddresses.mockRejectedValueOnce(new UnexpectedError())
+
+    makeSut()
+    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+
+    expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
   })
 })
