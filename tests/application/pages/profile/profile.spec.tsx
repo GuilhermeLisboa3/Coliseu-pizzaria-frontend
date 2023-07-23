@@ -2,7 +2,7 @@ import { addressParams, AccountParams } from '@/tests/mocks'
 import { Profile } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { UnexpectedError } from '@/domain/errors'
 
@@ -21,7 +21,7 @@ describe('Profile', () => {
   }
 
   beforeAll(() => {
-    listAddresses.mockResolvedValue([{ surname, complement, neighborhood, street, zipCode, number, id }])
+    listAddresses.mockResolvedValue([{ surname, complement, neighborhood, street, zipCode, number, id, active: true }])
     getSpy.mockReturnValue({ name, accessToken })
   })
 
@@ -43,6 +43,7 @@ describe('Profile', () => {
     makeSut()
 
     await waitFor(() => screen.getByRole('main'))
+    expect(await screen.findByTestId('address')).toHaveClass('active')
     expect(await screen.findByText(surname)).toBeInTheDocument()
     expect(await screen.findByText(`${street}, ${number}, ${complement}`)).toBeInTheDocument()
     expect(await screen.findByText(`${neighborhood}, ${zipCode}`)).toBeInTheDocument()
@@ -56,5 +57,16 @@ describe('Profile', () => {
     await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
 
     expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
+  })
+
+  it('should call listAddresses on reload', async () => {
+    listAddresses.mockRejectedValueOnce(new UnexpectedError())
+
+    makeSut()
+    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/i }))
+
+    expect(listAddresses).toHaveBeenCalledTimes(2)
+    await waitFor(() => screen.getByRole('main'))
   })
 })

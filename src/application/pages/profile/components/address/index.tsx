@@ -9,7 +9,7 @@ type Props = { address: AddressModel }
 
 export const Address: React.FC<Props> = ({ address }): JSX.Element => {
   return (
-    <Container className={address.active ? 'active' : ''}>
+    <Container className={address.active ? 'active' : ''} data-testid='address'>
       <div>
         <p>{address.surname}</p>
         <p>{address.street}, {address.number}, {address.complement}</p>
