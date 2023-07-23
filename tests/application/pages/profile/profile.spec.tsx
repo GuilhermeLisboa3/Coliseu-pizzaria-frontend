@@ -5,10 +5,12 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 describe('Profile', () => {
+  const listAddresses = jest.fn()
+
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <Profile />
+        <Profile listAddresses={listAddresses} />
       </AccountContext.Provider>
     )
   }
@@ -17,5 +19,11 @@ describe('Profile', () => {
     makeSut()
 
     expect(screen.getByTestId('skeletonAddress')).toBeInTheDocument()
+  })
+
+  it('should call listAddresses', async () => {
+    makeSut()
+
+    expect(listAddresses).toHaveBeenCalled()
   })
 })
