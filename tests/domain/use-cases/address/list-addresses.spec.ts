@@ -3,7 +3,7 @@ import { type HttpClient } from '@/domain/contracts/http'
 import { httpClientParams, addressParams } from '@/tests/mocks'
 
 import { mock } from 'jest-mock-extended'
-import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
+import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 describe('listAddressesUseCase', () => {
   const { url } = httpClientParams
@@ -26,12 +26,12 @@ describe('listAddressesUseCase', () => {
     expect(httpClient.request).toHaveBeenCalledTimes(1)
   })
 
-  it('should throw InvalidCredentialsError if HttpClient return 401', async () => {
+  it('should throw UnauthorizedError if HttpClient return 401', async () => {
     httpClient.request.mockResolvedValueOnce({ statusCode: 401 })
 
     const promise = sut()
 
-    await expect(promise).rejects.toThrow(new InvalidCredentialsError())
+    await expect(promise).rejects.toThrow(new UnauthorizedError())
   })
 
   it('should throw UnexpectedError if HttpClient return 500', async () => {

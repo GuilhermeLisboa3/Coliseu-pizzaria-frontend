@@ -6,6 +6,13 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { UnexpectedError } from '@/domain/errors'
 
+jest.mock('next/navigation', () => ({
+  useRouter () {
+    return ({ push: jest.fn() })
+  },
+  usePathname () {}
+}))
+
 describe('Profile', () => {
   const listAddresses = jest.fn()
   const getSpy = jest.fn()

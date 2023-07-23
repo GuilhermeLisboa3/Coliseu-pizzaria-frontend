@@ -6,6 +6,7 @@ import { Default } from '@/application/layouts'
 import { type ListAddresses } from '@/domain/use-cases/address'
 import { type Address as AddressModel } from '@/domain/models'
 import { AccountContext } from '@/application/contexts'
+import { useError } from '@/application/hooks'
 
 import { MdOutlineAdd } from 'react-icons/md'
 import Link from 'next/link'
@@ -18,10 +19,11 @@ export const Profile: React.FC<Props> = ({ listAddresses }): JSX.Element => {
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
   const [reload, setReload] = useState(true)
+  const handleError = useError(error => setError(error.message))
 
   useEffect(() => {
     setAddresses(undefined)
-    listAddresses().then(addresses => setAddresses(addresses)).catch(error => setError(error.message))
+    listAddresses().then(addresses => setAddresses(addresses)).catch(handleError)
   }, [reload])
 
   const handleReload = (): void => {
@@ -33,7 +35,7 @@ export const Profile: React.FC<Props> = ({ listAddresses }): JSX.Element => {
   return (
   <Default>
     <Container>
-      <h1>Olá, {getCurrentAccount().name}</h1>
+      <h1>Olá, {getCurrentAccount()?.name}</h1>
       <p>Onde deseja receber seu pedido?</p>
       <Addresess>
         <Link href={'/profile/address'}><Button><><MdOutlineAdd/> Adicionar</></Button></Link>
