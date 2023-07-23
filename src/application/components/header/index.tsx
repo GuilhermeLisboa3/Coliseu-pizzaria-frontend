@@ -13,7 +13,7 @@ export const Header: React.FC = (): JSX.Element => {
   const pathName = (pathname: string): string => path === pathname ? 'active' : ''
   const [visible, setVisible] = useState(false)
   return (
-  <Container>
+  <Container $bgColor={path === '/'}>
     <Section $visible={visible}>
       <button onClick={() => setVisible(!visible)}>
         { visible ? <AiOutlineClose/> : <AiOutlineMenu/>}

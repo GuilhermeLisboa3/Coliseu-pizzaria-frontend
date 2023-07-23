@@ -3,8 +3,8 @@ import { colors } from '@/application/styles'
 import { Container as Cont } from 'reactstrap'
 import styled from 'styled-components'
 
-export const Container = styled.header`
-  background-color: ${colors.primary};
+export const Container = styled.header<{ $bgColor: boolean }>`
+  background-color: ${props => props.$bgColor ? colors.primary : 'transparent'};
   padding: 10px 0px;
 
   @media (max-width: 576px) {
@@ -102,7 +102,7 @@ export const Section = styled(Cont)`
       justify-content: center;
       position: fixed;
       width: 100%;
-      height: ${props => props.$visible ? '100%' : '0'};
+      height: ${props => props.visible ? '100%' : '0'};
       overflow: hidden;
       top: 0;
       left: 0;
