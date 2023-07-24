@@ -1,5 +1,5 @@
 'use client'
-import { Button, Input } from '@/application/components'
+import { Button, Input, Spinner } from '@/application/components'
 import { Container } from './style'
 import { Default } from '@/application/layouts'
 import { type SearchAddress } from '@/domain/use-cases/address'
@@ -12,6 +12,7 @@ type Props = { validation: Validator, searchAddress: SearchAddress }
 
 export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.Element => {
   const [showFormSearch] = useState(true)
+  const [lodding, setLodding] = useState(false)
 
   const [zipCode, setZipCode] = useState<string>('')
   const [zipCodeError, setZipCodeError] = useState<string | undefined>('')
@@ -20,6 +21,8 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
 
   const handleSearchAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
+    if (lodding) return
+    setLodding(true)
     await searchAddress({ zipCode })
   }
 
@@ -31,7 +34,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
         { showFormSearch
           ? <form onSubmit={handleSearchAddress}>
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
-              <Button type='submit' disabled={!!zipCodeError}>Buscar</Button>
+              <Button type='submit' disabled={!!zipCodeError}>{ lodding ? <Spinner/> : 'Buscar'}</Button>
           </form>
           : <form>
               <div>
