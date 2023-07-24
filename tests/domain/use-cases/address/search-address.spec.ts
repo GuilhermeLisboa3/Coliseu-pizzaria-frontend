@@ -1,7 +1,7 @@
 import { type SearchAddress, searchAddressUseCase } from '@/domain/use-cases/address'
 import { type HttpClient } from '@/domain/contracts/http'
 import { httpClientParams, addressParams } from '@/tests/mocks'
-import { FieldNotFoundError } from '@/domain/errors'
+import { FieldNotFoundError, UnauthorizedError } from '@/domain/errors'
 
 import { mock } from 'jest-mock-extended'
 
@@ -32,5 +32,13 @@ describe('searchAddressUseCase', () => {
     const promise = sut({ zipCode })
 
     await expect(promise).rejects.toThrow(new FieldNotFoundError('cep'))
+  })
+
+  it('should throw UnauthorizedError if HttpClient return 401', async () => {
+    httpClient.request.mockResolvedValueOnce({ statusCode: 401 })
+
+    const promise = sut({ zipCode })
+
+    await expect(promise).rejects.toThrow(new UnauthorizedError())
   })
 })
