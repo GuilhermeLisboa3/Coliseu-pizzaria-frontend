@@ -7,12 +7,12 @@ import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 describe('addAddressUseCase', () => {
   const { url } = httpClientParams
-  const { zipCode, complement, neighborhood, number, street, surname } = addressParams
+  const { zipCode, complement, neighborhood, number, street, surname, id, active } = addressParams
   let sut: AddAddress
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200, data: null })
+    httpClient.request.mockResolvedValue({ statusCode: 200, data: { zipCode, complement, neighborhood, number, street, surname, id, active } })
   })
 
   beforeEach(() => {
@@ -40,5 +40,11 @@ describe('addAddressUseCase', () => {
     const promise = sut({ zipCode, complement, neighborhood, number, street, surname })
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return address on success', async () => {
+    const result = await sut({ zipCode, complement, neighborhood, number, street, surname })
+
+    expect(result).toEqual({ zipCode, complement, neighborhood, number, street, surname, id, active })
   })
 })
