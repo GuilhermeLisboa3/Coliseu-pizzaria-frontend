@@ -9,5 +9,5 @@ export const addressParams = {
   number: faker.datatype.number(),
   complement: faker.random.word(),
   active: true,
-  error: new Error(faker.random.word())
+  error: faker.random.word()
 }

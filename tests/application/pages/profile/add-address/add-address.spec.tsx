@@ -8,7 +8,7 @@ import React from 'react'
 import { mock } from 'jest-mock-extended'
 
 describe('AddAddress', () => {
-  const { zipCode } = addressParams
+  const { zipCode, error } = addressParams
   const validator = mock<Validator>()
 
   const makeSut = (): void => {
@@ -23,6 +23,8 @@ describe('AddAddress', () => {
   }
 
   it('should load with correct initial state', async () => {
+    validator.validate.mockReturnValueOnce(error)
+
     makeSut()
 
     expect(screen.getByTestId('cep')).toBeInTheDocument()
@@ -36,5 +38,14 @@ describe('AddAddress', () => {
     populateFields()
 
     expect(validator.validate).toHaveBeenCalledWith('zipCode', { zipCode })
+  })
+
+  it('should disable button if form if Validation fails', () => {
+    makeSut()
+    validator.validate.mockReturnValueOnce(error)
+
+    populateFields()
+
+    expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
   })
 })
