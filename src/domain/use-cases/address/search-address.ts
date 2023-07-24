@@ -1,5 +1,5 @@
 import { type HttpClient } from '@/domain/contracts/http'
-import { FieldNotFoundError } from '@/domain/errors'
+import { FieldNotFoundError, UnauthorizedError } from '@/domain/errors'
 
 type Setup = (url: string, httpClient: HttpClient) => SearchAddress
 type Input = { zipCode: string }
@@ -10,6 +10,7 @@ export const searchAddressUseCase: Setup = (url, httpClient) => async ({ zipCode
   const { statusCode } = await httpClient.request({ url: `${url}/${zipCode}`, method: 'post' })
   switch (statusCode) {
     case 400: throw new FieldNotFoundError('cep')
+    case 401: throw new UnauthorizedError()
     default: return undefined
   }
 }
