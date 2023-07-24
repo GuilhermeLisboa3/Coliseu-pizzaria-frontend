@@ -21,7 +21,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
 
   const handleSearchAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (lodding) return
+    if (lodding || zipCodeError) return
     setLodding(true)
     await searchAddress({ zipCode })
   }
@@ -32,7 +32,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
       <section>
         <img src={delivery.src} alt="" />
         { showFormSearch
-          ? <form onSubmit={handleSearchAddress}>
+          ? <form onSubmit={handleSearchAddress} data-testid='search-form'>
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
               <Button type='submit' disabled={!!zipCodeError}>{ lodding ? <Spinner/> : 'Buscar'}</Button>
           </form>
