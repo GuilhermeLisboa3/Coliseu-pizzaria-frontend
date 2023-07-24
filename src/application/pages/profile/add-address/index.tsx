@@ -13,8 +13,9 @@ export const AddAddress: React.FC<Props> = ({ validation }): JSX.Element => {
   const [showFormSearch] = useState(true)
 
   const [zipCode, setZipCode] = useState<string>('')
+  const [zipCodeError, setZipCodeError] = useState<string | undefined>('')
 
-  useEffect(() => { validation.validate('zipCode', { zipCode }) }, [zipCode])
+  useEffect(() => { setZipCodeError(validation.validate('zipCode', { zipCode })) }, [zipCode])
 
   return (
   <Default>
@@ -24,7 +25,7 @@ export const AddAddress: React.FC<Props> = ({ validation }): JSX.Element => {
         { showFormSearch
           ? <form>
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
-              <Button disabled={true}>Buscar</Button>
+              <Button disabled={!!zipCodeError}>Buscar</Button>
           </form>
           : <form>
               <div>
