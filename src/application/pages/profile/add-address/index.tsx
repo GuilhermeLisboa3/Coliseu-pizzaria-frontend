@@ -7,6 +7,7 @@ import { type Validator } from '@/application/validation'
 import delivery from '@/application/assets/profile/entregadora.png'
 
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = { validation: Validator, searchAddress: SearchAddress }
 
@@ -22,8 +23,13 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
   const handleSearchAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (lodding || zipCodeError) return
-    setLodding(true)
-    await searchAddress({ zipCode })
+    try {
+      setLodding(true)
+      await searchAddress({ zipCode })
+    } catch (error: any) {
+      setLodding(false)
+      toast.error(error.message)
+    }
   }
 
   return (
