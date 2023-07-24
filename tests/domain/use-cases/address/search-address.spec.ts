@@ -22,7 +22,7 @@ describe('searchAddressUseCase', () => {
   it('should call HttpClient with correct values', async () => {
     await sut({ zipCode })
 
-    expect(httpClient.request).toHaveBeenCalledWith({ url: `${url}/${zipCode}`, method: 'post' })
+    expect(httpClient.request).toHaveBeenCalledWith({ url: `${url}/${zipCode}`, method: 'get' })
     expect(httpClient.request).toHaveBeenCalledTimes(1)
   })
 
