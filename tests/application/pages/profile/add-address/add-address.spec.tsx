@@ -25,7 +25,7 @@ describe('AddAddress', () => {
 
   const simulateSearchFormSubmit = (): void => {
     populateSearchFormFields()
-    fireEvent.click(screen.getByRole('button', { name: /Buscar/i }))
+    fireEvent.click(screen.getByRole('button', { name: 'Buscar' }))
   }
 
   it('should load with correct initial state', async () => {
@@ -61,5 +61,13 @@ describe('AddAddress', () => {
     simulateSearchFormSubmit()
 
     expect(searchAddress).toHaveBeenCalledWith({ zipCode })
+  })
+
+  it('should show spinner if click button', async () => {
+    makeSut()
+
+    simulateSearchFormSubmit()
+
+    expect(await screen.findByTestId('spinner')).toBeInTheDocument()
   })
 })
