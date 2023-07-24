@@ -2,10 +2,12 @@ import { populateField, addressParams } from '@/tests/mocks'
 import { AddAddress } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 import { type Validator } from '@/application/validation'
+import { FieldNotFoundError } from '@/domain/errors'
 
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { mock } from 'jest-mock-extended'
+import { ToastContainer } from 'react-toastify'
 
 describe('AddAddress', () => {
   const { zipCode, error } = addressParams
@@ -15,6 +17,7 @@ describe('AddAddress', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+        <ToastContainer/>
         <AddAddress validation={validator} searchAddress={searchAddress}/>
       </AccountContext.Provider>
     )
@@ -79,5 +82,14 @@ describe('AddAddress', () => {
     fireEvent.submit(screen.getByTestId('search-form'))
 
     expect(searchAddress).not.toHaveBeenCalled()
+  })
+
+  it('should show error if searchAddress return error', async () => {
+    makeSut()
+    searchAddress.mockRejectedValueOnce(new FieldNotFoundError('cep'))
+
+    simulateSearchFormSubmit()
+
+    expect(await screen.findByText(new FieldNotFoundError('cep').message)).toBeInTheDocument()
   })
 })
