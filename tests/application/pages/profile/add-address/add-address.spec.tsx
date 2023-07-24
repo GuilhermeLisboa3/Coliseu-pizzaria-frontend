@@ -3,23 +3,29 @@ import { AddAddress } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 import { type Validator } from '@/application/validation'
 
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { mock } from 'jest-mock-extended'
 
 describe('AddAddress', () => {
   const { zipCode, error } = addressParams
+  const searchAddress = jest.fn()
   const validator = mock<Validator>()
 
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <AddAddress validation={validator} />
+        <AddAddress validation={validator} searchAddress={searchAddress}/>
       </AccountContext.Provider>
     )
   }
-  const populateFields = (): void => {
+  const populateSearchFormFields = (): void => {
     populateField('cep', zipCode)
+  }
+
+  const simulateSearchFormSubmit = (): void => {
+    populateSearchFormFields()
+    fireEvent.click(screen.getByRole('button', { name: /Buscar/i }))
   }
 
   it('should load with correct initial state', async () => {
@@ -35,7 +41,7 @@ describe('AddAddress', () => {
   it('should call validation with correct values', () => {
     makeSut()
 
-    populateFields()
+    populateSearchFormFields()
 
     expect(validator.validate).toHaveBeenCalledWith('zipCode', { zipCode })
   })
@@ -44,8 +50,16 @@ describe('AddAddress', () => {
     makeSut()
     validator.validate.mockReturnValueOnce(error)
 
-    populateFields()
+    populateSearchFormFields()
 
     expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
+  })
+
+  it('should call searchAddress with correct values', () => {
+    makeSut()
+
+    simulateSearchFormSubmit()
+
+    expect(searchAddress).toHaveBeenCalledWith({ zipCode })
   })
 })
