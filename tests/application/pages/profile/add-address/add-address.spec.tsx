@@ -70,4 +70,14 @@ describe('AddAddress', () => {
 
     expect(await screen.findByTestId('spinner')).toBeInTheDocument()
   })
+
+  it('should not call searchAddress if validation fails', () => {
+    makeSut()
+    validator.validate.mockReturnValueOnce(error)
+
+    populateSearchFormFields()
+    fireEvent.submit(screen.getByTestId('search-form'))
+
+    expect(searchAddress).not.toHaveBeenCalled()
+  })
 })
