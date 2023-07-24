@@ -2,12 +2,20 @@
 import { Button, Input } from '@/application/components'
 import { Container } from './style'
 import { Default } from '@/application/layouts'
+import { type Validator } from '@/application/validation'
 import delivery from '@/application/assets/profile/entregadora.png'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-export const AddAddress: React.FC = (): JSX.Element => {
+type Props = { validation: Validator }
+
+export const AddAddress: React.FC<Props> = ({ validation }): JSX.Element => {
   const [showFormSearch] = useState(true)
+
+  const [zipCode, setZipCode] = useState<string>('')
+
+  useEffect(() => { validation.validate('zipCode', { zipCode }) }, [zipCode])
+
   return (
   <Default>
     <Container>
@@ -15,7 +23,7 @@ export const AddAddress: React.FC = (): JSX.Element => {
         <img src={delivery.src} alt="" />
         { showFormSearch
           ? <form>
-              <Input placeholder="Digite seu cep" type='text' name='cep' setState={() => {}}/>
+              <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
               <Button disabled={true}>Buscar</Button>
           </form>
           : <form>
