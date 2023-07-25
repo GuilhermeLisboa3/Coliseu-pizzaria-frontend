@@ -9,8 +9,12 @@ import React from 'react'
 import { mock } from 'jest-mock-extended'
 import { ToastContainer } from 'react-toastify'
 
+jest.mock('next/navigation')
+
 describe('AddAddress', () => {
   const { zipCode, neighborhood, street, error, complement, number, surname } = addressParams
+  const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
+  const router = { push: jest.fn() }
   const searchAddress = jest.fn()
   const addAddress = jest.fn()
   const validator = mock<Validator>()
@@ -25,6 +29,7 @@ describe('AddAddress', () => {
   }
 
   beforeAll(() => {
+    useRouter.mockReturnValue(router)
     searchAddress.mockResolvedValue({ neighborhood, street })
   })
 
@@ -170,5 +175,14 @@ describe('AddAddress', () => {
     await simulateAddFormSubmit()
 
     expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
+  })
+
+  it('should call push navigation if addAddress succeeds', async () => {
+    makeSut()
+
+    await simulateAddFormSubmit()
+    fireEvent.submit(screen.getByTestId('add-form'))
+
+    expect(router.push).toHaveBeenCalledWith('/profile')
   })
 })
