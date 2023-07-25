@@ -23,6 +23,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
   const [reload, setReload] = useState(true)
   const [lodding, setLodding] = useState(false)
   const handleError = useError(error => setError(error.message))
+  const handleDeleteError = useError(error => toast.error(error.message))
 
   useEffect(() => {
     setAddresses(undefined)
@@ -41,7 +42,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
       setLodding(true)
       await deleteAddress({ id })
     } catch (error: any) {
-      toast.error(error.message)
+      handleDeleteError(error)
     } finally {
       setLodding(false)
     }
