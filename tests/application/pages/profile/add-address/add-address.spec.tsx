@@ -153,4 +153,13 @@ describe('AddAddress', () => {
 
     expect(addAddress).not.toHaveBeenCalled()
   })
+
+  it('should show spinner if click button', async () => {
+    makeSut()
+    await simulateAddFormSubmit()
+    fireEvent.submit(screen.getByTestId('add-form'))
+
+    expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+    await waitFor(() => screen.getByTestId('add-form'))
+  })
 })
