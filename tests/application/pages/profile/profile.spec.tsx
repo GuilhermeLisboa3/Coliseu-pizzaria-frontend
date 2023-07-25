@@ -1,10 +1,11 @@
 import { addressParams, AccountParams } from '@/tests/mocks'
 import { Profile } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
+import { AddressContext } from '@/application/pages/profile/contexts'
+import { UnexpectedError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
-import { UnexpectedError } from '@/domain/errors'
 
 jest.mock('next/navigation', () => ({
   useRouter () {
@@ -15,6 +16,7 @@ jest.mock('next/navigation', () => ({
 
 describe('Profile', () => {
   const listAddresses = jest.fn()
+  const deleteAddress = jest.fn()
   const getSpy = jest.fn()
   const { surname, complement, neighborhood, street, zipCode, number, id } = addressParams
   const { name, accessToken } = AccountParams
@@ -22,7 +24,9 @@ describe('Profile', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: getSpy }}>
-        <Profile listAddresses={listAddresses} />
+        <AddressContext.Provider value={{ handleDelete: jest.fn() }}>
+          <Profile listAddresses={listAddresses} deleteAddress={deleteAddress}/>
+        </AddressContext.Provider>
       </AccountContext.Provider>
     )
   }
@@ -32,47 +36,60 @@ describe('Profile', () => {
     getSpy.mockReturnValue({ name, accessToken })
   })
 
-  it('should load with correct initial state', async () => {
-    makeSut()
+  describe('list', () => {
+    it('should load with correct initial state', async () => {
+      makeSut()
 
-    expect(screen.getByTestId('skeletonAddress')).toBeInTheDocument()
-    await waitFor(() => screen.getByRole('main'))
+      expect(screen.getByTestId('skeletonAddress')).toBeInTheDocument()
+      await waitFor(() => screen.getByRole('main'))
+    })
+
+    it('should call listAddresses', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByRole('main'))
+      expect(listAddresses).toHaveBeenCalled()
+    })
+
+    it('should render user name and addresses on success', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByRole('main'))
+      expect(await screen.findByText(surname)).toBeInTheDocument()
+      expect(await screen.findByText(`${street}, ${number}, ${complement}`)).toBeInTheDocument()
+      expect(await screen.findByText(`${neighborhood}, ${zipCode}`)).toBeInTheDocument()
+      expect(await screen.findByText(`Olá, ${name}`)).toBeInTheDocument()
+    })
+
+    it('should render error on UnexpectedError', async () => {
+      listAddresses.mockRejectedValueOnce(new UnexpectedError())
+
+      makeSut()
+      await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+
+      expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
+    })
+
+    it('should call listAddresses on reload', async () => {
+      listAddresses.mockRejectedValueOnce(new UnexpectedError())
+
+      makeSut()
+      await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+      fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/i }))
+
+      expect(listAddresses).toHaveBeenCalledTimes(2)
+      await waitFor(() => screen.getByRole('main'))
+    })
   })
 
-  it('should call listAddresses', async () => {
-    makeSut()
+  describe('delete', () => {
+    it('should call deleteAddress with correct value', async () => {
+      makeSut()
 
-    await waitFor(() => screen.getByRole('main'))
-    expect(listAddresses).toHaveBeenCalled()
-  })
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
 
-  it('should render user name and addresses on success', async () => {
-    makeSut()
-
-    await waitFor(() => screen.getByRole('main'))
-    expect(await screen.findByText(surname)).toBeInTheDocument()
-    expect(await screen.findByText(`${street}, ${number}, ${complement}`)).toBeInTheDocument()
-    expect(await screen.findByText(`${neighborhood}, ${zipCode}`)).toBeInTheDocument()
-    expect(await screen.findByText(`Olá, ${name}`)).toBeInTheDocument()
-  })
-
-  it('should render error on UnexpectedError', async () => {
-    listAddresses.mockRejectedValueOnce(new UnexpectedError())
-
-    makeSut()
-    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
-
-    expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
-  })
-
-  it('should call listAddresses on reload', async () => {
-    listAddresses.mockRejectedValueOnce(new UnexpectedError())
-
-    makeSut()
-    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
-    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/i }))
-
-    expect(listAddresses).toHaveBeenCalledTimes(2)
-    await waitFor(() => screen.getByRole('main'))
+      expect(deleteAddress).toHaveBeenCalledWith({ id })
+    })
   })
 })
