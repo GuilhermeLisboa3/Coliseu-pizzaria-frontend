@@ -41,6 +41,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
     try {
       setLodding(true)
       await deleteAddress({ id })
+      setAddresses(addresses?.filter(address => address.id !== id))
     } catch (error: any) {
       handleDeleteError(error)
     } finally {
