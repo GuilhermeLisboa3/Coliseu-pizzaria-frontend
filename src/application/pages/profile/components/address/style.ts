@@ -2,20 +2,16 @@
 import { colors } from '@/application/styles'
 import styled from 'styled-components'
 
-export const Container = styled.section`
+export const Container = styled.section<{ $active: boolean }>`
   margin: 10px 0px;
   box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
-  border: 2px solid ${colors.grayLight};
+  border: 2px solid ${props => props.$active ? colors.redDark : colors.grayLight};;
   border-radius: 5px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-
-  .active {
-    border: 2px solid ${colors.redDark};
-  }
 
   div {
     margin: 0;

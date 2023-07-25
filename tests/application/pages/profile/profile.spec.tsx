@@ -50,7 +50,6 @@ describe('Profile', () => {
     makeSut()
 
     await waitFor(() => screen.getByRole('main'))
-    expect(await screen.findByTestId('address')).toHaveClass('active')
     expect(await screen.findByText(surname)).toBeInTheDocument()
     expect(await screen.findByText(`${street}, ${number}, ${complement}`)).toBeInTheDocument()
     expect(await screen.findByText(`${neighborhood}, ${zipCode}`)).toBeInTheDocument()
