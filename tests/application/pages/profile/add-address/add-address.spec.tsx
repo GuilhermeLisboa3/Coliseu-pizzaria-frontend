@@ -10,7 +10,7 @@ import { mock } from 'jest-mock-extended'
 import { ToastContainer } from 'react-toastify'
 
 describe('AddAddress', () => {
-  const { zipCode, neighborhood, street, error } = addressParams
+  const { zipCode, neighborhood, street, error, complement, number, surname } = addressParams
   const searchAddress = jest.fn()
   const validator = mock<Validator>()
 
@@ -29,6 +29,14 @@ describe('AddAddress', () => {
 
   const populateSearchFormFields = (): void => {
     populateField('cep', zipCode)
+  }
+
+  const populateAddFormFields = async (): Promise<void> => {
+    simulateSearchFormSubmit()
+    await waitFor(() => screen.getByTestId('add-form'))
+    populateField('number', number.toString())
+    populateField('complement', complement)
+    populateField('surname', surname)
   }
 
   const simulateSearchFormSubmit = (): void => {
@@ -111,5 +119,13 @@ describe('AddAddress', () => {
     expect(screen.getByTestId('neighborhood')).toHaveProperty('value', neighborhood)
     expect(screen.getByTestId('street')).toHaveProperty('value', street)
     expect(screen.getByTestId('cep')).toHaveProperty('value', zipCode)
+  })
+
+  it('should enable submit button if form-add is valid', async () => {
+    makeSut()
+
+    await populateAddFormFields()
+
+    expect(screen.getByRole('button', { name: 'Salvar' })).toBeEnabled()
   })
 })
