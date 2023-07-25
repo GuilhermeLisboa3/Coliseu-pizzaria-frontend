@@ -2,7 +2,7 @@ import { addressParams, AccountParams } from '@/tests/mocks'
 import { Profile } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 import { AddressContext } from '@/application/pages/profile/contexts'
-import { UnexpectedError } from '@/domain/errors'
+import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ToastContainer } from 'react-toastify'
@@ -19,12 +19,15 @@ describe('Profile', () => {
   const listAddresses = jest.fn()
   const deleteAddress = jest.fn()
   const getSpy = jest.fn()
+  const setSpy = jest.fn()
+  const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
+  const router = { push: jest.fn() }
   const { surname, complement, neighborhood, street, zipCode, number, id } = addressParams
   const { name, accessToken } = AccountParams
 
   const makeSut = (): void => {
     render(
-      <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: getSpy }}>
+      <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
         <AddressContext.Provider value={{ handleDelete: jest.fn() }}>
           <ToastContainer/>
           <Profile listAddresses={listAddresses} deleteAddress={deleteAddress}/>
@@ -34,6 +37,7 @@ describe('Profile', () => {
   }
 
   beforeAll(() => {
+    useRouter.mockReturnValue(router)
     listAddresses.mockResolvedValue([{ surname, complement, neighborhood, street, zipCode, number, id, active: true }])
     getSpy.mockReturnValue({ name, accessToken })
   })
@@ -116,6 +120,18 @@ describe('Profile', () => {
 
       expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
       await waitFor(() => screen.getByTestId('address'))
+    })
+
+    it('should logout if deleteAddress return UnauthorizedError', async () => {
+      makeSut()
+      deleteAddress.mockRejectedValueOnce(new UnauthorizedError())
+
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
+      await waitFor(async () => await screen.findByText(new UnauthorizedError().message))
+
+      expect(setSpy).toHaveBeenCalledWith(undefined)
+      expect(router.push).toHaveBeenCalledWith('/login')
     })
   })
 })
