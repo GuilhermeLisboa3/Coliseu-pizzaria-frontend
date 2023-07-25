@@ -7,11 +7,13 @@ import { type Validator } from '@/application/validation'
 import delivery from '@/application/assets/profile/entregadora.png'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 type Props = { validation: Validator, searchAddress: SearchAddress, addAddress: AddAddressUC }
 
 export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddress }): JSX.Element => {
+  const { push } = useRouter()
   const [showFormSearch, setShowFormSearch] = useState(true)
   const [lodding, setLodding] = useState(false)
 
@@ -51,6 +53,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
     try {
       setLodding(true)
       await addAddress({ surname, complement, neighborhood, zipCode, number: Number(number), street })
+      push('/profile')
     } catch (error: any) {
       setLodding(false)
       toast.error(error.message)
