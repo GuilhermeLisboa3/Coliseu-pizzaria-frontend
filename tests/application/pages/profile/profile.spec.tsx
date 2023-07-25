@@ -133,5 +133,15 @@ describe('Profile', () => {
       expect(setSpy).toHaveBeenCalledWith(undefined)
       expect(router.push).toHaveBeenCalledWith('/login')
     })
+
+    it('should remove address on success', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
+      await waitFor(() => screen.getByTestId('address'))
+
+      expect(screen.queryByTestId('address')).not.toBeInTheDocument()
+    })
   })
 })
