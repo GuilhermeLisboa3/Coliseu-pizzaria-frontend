@@ -20,6 +20,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
   const [reload, setReload] = useState(true)
+  const [lodding, setLodding] = useState(false)
   const handleError = useError(error => setError(error.message))
 
   useEffect(() => {
@@ -34,6 +35,8 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
   }
 
   const handleDelete = async (id: string): Promise<void> => {
+    if (lodding) return
+    setLodding(true)
     await deleteAddress({ id })
   }
 
