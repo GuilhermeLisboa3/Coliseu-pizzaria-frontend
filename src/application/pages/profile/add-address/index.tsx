@@ -2,16 +2,16 @@
 import { Button, Input, Spinner } from '@/application/components'
 import { Container } from './style'
 import { Default } from '@/application/layouts'
-import { type SearchAddress } from '@/domain/use-cases/address'
+import { type AddAddress as AddAddressUC, type SearchAddress } from '@/domain/use-cases/address'
 import { type Validator } from '@/application/validation'
 import delivery from '@/application/assets/profile/entregadora.png'
 
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-type Props = { validation: Validator, searchAddress: SearchAddress }
+type Props = { validation: Validator, searchAddress: SearchAddress, addAddress: AddAddressUC }
 
-export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.Element => {
+export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddress }): JSX.Element => {
   const [showFormSearch, setShowFormSearch] = useState(true)
   const [lodding, setLodding] = useState(false)
 
@@ -23,7 +23,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
   const [numberError, setNumberError] = useState<string | undefined>('')
   const [surname, setSurname] = useState('')
   const [surnameError, setSurnameError] = useState<string | undefined>('')
-  const [, setComplement] = useState('')
+  const [complement, setComplement] = useState('')
 
   useEffect(() => { setZipCodeError(validation.validate('zipCode', { zipCode })) }, [zipCode])
   useEffect(() => setNumberError(validation.validate('number', { number })), [number])
@@ -45,6 +45,11 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
     }
   }
 
+  const handlAddAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    await addAddress({ surname, complement, neighborhood, zipCode, number: Number(number), street })
+  }
+
   return (
   <Default>
     <Container>
@@ -55,7 +60,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
               <Button type='submit' disabled={!!zipCodeError}>{ lodding ? <Spinner/> : 'Buscar'}</Button>
           </form>
-          : <form data-testid='add-form'>
+          : <form onSubmit={handlAddAddress} data-testid='add-form'>
               <div>
                 <Input placeholder="Apelido" type='text' name='surname' setState={setSurname}/>
                 <Input placeholder="Cep" type='text' name='cep' setState={setZipCode} value={zipCode} readOnly/>
