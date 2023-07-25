@@ -5,6 +5,7 @@ import { AddressContext } from '@/application/pages/profile/contexts'
 import { UnexpectedError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { ToastContainer } from 'react-toastify'
 import React from 'react'
 
 jest.mock('next/navigation', () => ({
@@ -25,6 +26,7 @@ describe('Profile', () => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: getSpy }}>
         <AddressContext.Provider value={{ handleDelete: jest.fn() }}>
+          <ToastContainer/>
           <Profile listAddresses={listAddresses} deleteAddress={deleteAddress}/>
         </AddressContext.Provider>
       </AccountContext.Provider>
@@ -90,6 +92,7 @@ describe('Profile', () => {
       fireEvent.click(screen.getByTestId('icon-delete'))
 
       expect(deleteAddress).toHaveBeenCalledWith({ id })
+      await waitFor(() => screen.getByTestId('address'))
     })
 
     it('should call deleteAddress only once', async () => {
@@ -101,6 +104,18 @@ describe('Profile', () => {
 
       expect(deleteAddress).toHaveBeenCalledTimes(1)
       expect(deleteAddress).toHaveBeenCalledWith({ id })
+      await waitFor(() => screen.getByTestId('address'))
+    })
+
+    it('should show alert error if deleteAddress fails', async () => {
+      makeSut()
+      deleteAddress.mockRejectedValueOnce(new UnexpectedError())
+
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
+
+      expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
+      await waitFor(() => screen.getByTestId('address'))
     })
   })
 })
