@@ -2,7 +2,7 @@ import { populateField, addressParams } from '@/tests/mocks'
 import { AddAddress } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 import { type Validator } from '@/application/validation'
-import { FieldNotFoundError } from '@/domain/errors'
+import { FieldNotFoundError, UnexpectedError } from '@/domain/errors'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -161,5 +161,14 @@ describe('AddAddress', () => {
 
     expect(await screen.findByTestId('spinner')).toBeInTheDocument()
     await waitFor(() => screen.getByTestId('add-form'))
+  })
+
+  it('should show alert error if AddAddress fails', async () => {
+    makeSut()
+    addAddress.mockRejectedValueOnce(new UnexpectedError())
+
+    await simulateAddFormSubmit()
+
+    expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
   })
 })
