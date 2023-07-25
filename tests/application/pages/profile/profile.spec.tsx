@@ -91,5 +91,16 @@ describe('Profile', () => {
 
       expect(deleteAddress).toHaveBeenCalledWith({ id })
     })
+
+    it('should call deleteAddress only once', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
+      fireEvent.click(screen.getByTestId('icon-delete'))
+
+      expect(deleteAddress).toHaveBeenCalledTimes(1)
+      expect(deleteAddress).toHaveBeenCalledWith({ id })
+    })
   })
 })
