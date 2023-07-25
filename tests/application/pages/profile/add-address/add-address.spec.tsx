@@ -143,4 +143,14 @@ describe('AddAddress', () => {
 
     expect(addAddress).toHaveBeenCalledWith({ zipCode, neighborhood, street, surname, number, complement })
   })
+
+  it('should not call AddAddress if validation fails', async () => {
+    makeSut()
+    validator.validate.mockReturnValueOnce('').mockReturnValueOnce(error)
+
+    await populateAddFormFields()
+    fireEvent.submit(screen.getByTestId('add-form'))
+
+    expect(addAddress).not.toHaveBeenCalled()
+  })
 })
