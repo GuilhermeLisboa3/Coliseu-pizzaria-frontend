@@ -12,13 +12,14 @@ import { ToastContainer } from 'react-toastify'
 describe('AddAddress', () => {
   const { zipCode, neighborhood, street, error, complement, number, surname } = addressParams
   const searchAddress = jest.fn()
+  const addAddress = jest.fn()
   const validator = mock<Validator>()
 
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
         <ToastContainer/>
-        <AddAddress validation={validator} searchAddress={searchAddress}/>
+        <AddAddress validation={validator} searchAddress={searchAddress} addAddress={addAddress}/>
       </AccountContext.Provider>
     )
   }
@@ -42,6 +43,11 @@ describe('AddAddress', () => {
   const simulateSearchFormSubmit = (): void => {
     populateSearchFormFields()
     fireEvent.click(screen.getByRole('button', { name: 'Buscar' }))
+  }
+
+  const simulateAddFormSubmit = async (): Promise<void> => {
+    await populateAddFormFields()
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar' }))
   }
 
   it('should load with correct initial state', async () => {
@@ -127,5 +133,14 @@ describe('AddAddress', () => {
     await populateAddFormFields()
 
     expect(screen.getByRole('button', { name: 'Salvar' })).toBeEnabled()
+  })
+
+  it('should call AddAddress with correct values', async () => {
+    makeSut()
+
+    await simulateAddFormSubmit()
+    await waitFor(() => screen.getByTestId('add-form'))
+
+    expect(addAddress).toHaveBeenCalledWith({ zipCode, neighborhood, street, surname, number, complement })
   })
 })
