@@ -12,7 +12,7 @@ describe('aditAddressUseCase', () => {
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200, data: null })
+    httpClient.request.mockResolvedValue({ statusCode: 204, data: null })
   })
 
   beforeEach(() => {
@@ -40,5 +40,11 @@ describe('aditAddressUseCase', () => {
     const promise = sut({ complement, number, surname, active, id })
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return undefined on success', async () => {
+    const result = await sut({ id })
+
+    expect(result).toBeUndefined()
   })
 })
