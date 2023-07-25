@@ -47,6 +47,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
 
   const handlAddAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
+    if (lodding || surnameError || numberError) return
     await addAddress({ surname, complement, neighborhood, zipCode, number: Number(number), street })
   }
 
