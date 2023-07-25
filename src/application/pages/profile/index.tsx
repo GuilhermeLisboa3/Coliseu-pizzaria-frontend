@@ -12,6 +12,7 @@ import { AddressContext } from '@/application/pages/profile/contexts'
 import { MdOutlineAdd } from 'react-icons/md'
 import Link from 'next/link'
 import React, { useState, useContext, useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = { listAddresses: ListAddresses, deleteAddress: DeleteAddress }
 
@@ -36,8 +37,14 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
 
   const handleDelete = async (id: string): Promise<void> => {
     if (lodding) return
-    setLodding(true)
-    await deleteAddress({ id })
+    try {
+      setLodding(true)
+      await deleteAddress({ id })
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLodding(false)
+    }
   }
 
   return (
