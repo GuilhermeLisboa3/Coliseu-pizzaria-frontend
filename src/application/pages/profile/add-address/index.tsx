@@ -12,11 +12,13 @@ import { toast } from 'react-toastify'
 type Props = { validation: Validator, searchAddress: SearchAddress }
 
 export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.Element => {
-  const [showFormSearch] = useState(true)
+  const [showFormSearch, setShowFormSearch] = useState(true)
   const [lodding, setLodding] = useState(false)
 
   const [zipCode, setZipCode] = useState<string>('')
   const [zipCodeError, setZipCodeError] = useState<string | undefined>('')
+  const [neighborhood, setNeighborhood] = useState<string>('')
+  const [street, setStreet] = useState<string>('')
 
   useEffect(() => { setZipCodeError(validation.validate('zipCode', { zipCode })) }, [zipCode])
 
@@ -25,10 +27,14 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
     if (lodding || zipCodeError) return
     try {
       setLodding(true)
-      await searchAddress({ zipCode })
+      const { neighborhood, street } = await searchAddress({ zipCode })
+      setNeighborhood(neighborhood)
+      setStreet(street)
+      setShowFormSearch(false)
     } catch (error: any) {
-      setLodding(false)
       toast.error(error.message)
+    } finally {
+      setLodding(false)
     }
   }
 
@@ -42,14 +48,14 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
               <Button type='submit' disabled={!!zipCodeError}>{ lodding ? <Spinner/> : 'Buscar'}</Button>
           </form>
-          : <form>
+          : <form data-testid='add-form'>
               <div>
                 <Input placeholder="Apelido" type='text' name='surname' setState={() => {}}/>
-                <Input placeholder="Cep" type='text' name='cep' setState={() => {}}/>
+                <Input placeholder="Cep" type='text' name='cep' setState={setZipCode} value={zipCode} readOnly/>
                 <Input placeholder="Numero" type='text' name='number' setState={() => {}}/>
               </div>
-            <Input placeholder="Bairro" type='text' name='neighborhood' setState={() => {}}/>
-            <Input placeholder="Rua" type='text' name='street' setState={() => {}}/>
+            <Input placeholder="Bairro" type='text' name='neighborhood' setState={setNeighborhood} value={neighborhood} readOnly/>
+            <Input placeholder="Rua" type='text' name='street' setState={setStreet} value={street} readOnly/>
             <Input placeholder="Complemento" type='text' name='complement' setState={() => {}}/>
             <Button>Salvar</Button>
           </form>
