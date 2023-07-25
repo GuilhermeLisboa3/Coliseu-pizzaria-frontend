@@ -48,6 +48,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
   const handlAddAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (lodding || surnameError || numberError) return
+    setLodding(true)
     await addAddress({ surname, complement, neighborhood, zipCode, number: Number(number), street })
   }
 
@@ -70,7 +71,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
             <Input placeholder="Bairro" type='text' name='neighborhood' setState={setNeighborhood} value={neighborhood} readOnly/>
             <Input placeholder="Rua" type='text' name='street' setState={setStreet} value={street} readOnly/>
             <Input placeholder="Complemento" type='text' name='complement' setState={setComplement}/>
-            <Button type='submit' disabled={!!numberError || !!surnameError}>Salvar</Button>
+            <Button type='submit' disabled={!!numberError || !!surnameError}>{ lodding ? <Spinner/> : 'Salvar'}</Button>
           </form>
         }
       </section>
