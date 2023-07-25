@@ -19,8 +19,15 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
   const [zipCodeError, setZipCodeError] = useState<string | undefined>('')
   const [neighborhood, setNeighborhood] = useState<string>('')
   const [street, setStreet] = useState<string>('')
+  const [number, setNumber] = useState('')
+  const [numberError, setNumberError] = useState<string | undefined>('')
+  const [surname, setSurname] = useState('')
+  const [surnameError, setSurnameError] = useState<string | undefined>('')
+  const [, setComplement] = useState('')
 
   useEffect(() => { setZipCodeError(validation.validate('zipCode', { zipCode })) }, [zipCode])
+  useEffect(() => setNumberError(validation.validate('number', { number })), [number])
+  useEffect(() => setSurnameError(validation.validate('surname', { surname })), [surname])
 
   const handleSearchAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
@@ -50,14 +57,14 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress }): JSX.
           </form>
           : <form data-testid='add-form'>
               <div>
-                <Input placeholder="Apelido" type='text' name='surname' setState={() => {}}/>
+                <Input placeholder="Apelido" type='text' name='surname' setState={setSurname}/>
                 <Input placeholder="Cep" type='text' name='cep' setState={setZipCode} value={zipCode} readOnly/>
-                <Input placeholder="Numero" type='text' name='number' setState={() => {}}/>
+                <Input placeholder="Número" type='text' name='number' setState={setNumber}/>
               </div>
             <Input placeholder="Bairro" type='text' name='neighborhood' setState={setNeighborhood} value={neighborhood} readOnly/>
             <Input placeholder="Rua" type='text' name='street' setState={setStreet} value={street} readOnly/>
-            <Input placeholder="Complemento" type='text' name='complement' setState={() => {}}/>
-            <Button>Salvar</Button>
+            <Input placeholder="Complemento" type='text' name='complement' setState={setComplement}/>
+            <Button type='submit' disabled={!!numberError || !!surnameError}>Salvar</Button>
           </form>
         }
       </section>
