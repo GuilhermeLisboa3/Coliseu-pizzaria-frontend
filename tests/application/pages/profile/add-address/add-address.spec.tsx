@@ -4,13 +4,13 @@ import { AccountContext } from '@/application/contexts'
 import { type Validator } from '@/application/validation'
 import { FieldNotFoundError } from '@/domain/errors'
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { mock } from 'jest-mock-extended'
 import { ToastContainer } from 'react-toastify'
 
 describe('AddAddress', () => {
-  const { zipCode, error } = addressParams
+  const { zipCode, neighborhood, street, error } = addressParams
   const searchAddress = jest.fn()
   const validator = mock<Validator>()
 
@@ -22,6 +22,11 @@ describe('AddAddress', () => {
       </AccountContext.Provider>
     )
   }
+
+  beforeAll(() => {
+    searchAddress.mockResolvedValue({ neighborhood, street })
+  })
+
   const populateSearchFormFields = (): void => {
     populateField('cep', zipCode)
   }
@@ -58,10 +63,11 @@ describe('AddAddress', () => {
     expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
   })
 
-  it('should call searchAddress with correct values', () => {
+  it('should call searchAddress with correct values', async () => {
     makeSut()
 
     simulateSearchFormSubmit()
+    await waitFor(() => screen.getByTestId('search-form'))
 
     expect(searchAddress).toHaveBeenCalledWith({ zipCode })
   })
@@ -71,7 +77,8 @@ describe('AddAddress', () => {
 
     simulateSearchFormSubmit()
 
-    expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+    expect(screen.getByTestId('spinner')).toBeInTheDocument()
+    await waitFor(() => screen.getByTestId('add-form'))
   })
 
   it('should not call searchAddress if validation fails', () => {
@@ -91,5 +98,18 @@ describe('AddAddress', () => {
     simulateSearchFormSubmit()
 
     expect(await screen.findByText(new FieldNotFoundError('cep').message)).toBeInTheDocument()
+  })
+
+  it('should show form-add if SearchAddress succeeds', async () => {
+    makeSut()
+
+    simulateSearchFormSubmit()
+    await waitFor(() => screen.getByTestId('add-form'))
+
+    expect(screen.getByTestId('add-form')).toBeInTheDocument()
+    expect(screen.queryByTestId('form-search')).not.toBeInTheDocument()
+    expect(screen.getByTestId('neighborhood')).toHaveProperty('value', neighborhood)
+    expect(screen.getByTestId('street')).toHaveProperty('value', street)
+    expect(screen.getByTestId('cep')).toHaveProperty('value', zipCode)
   })
 })
