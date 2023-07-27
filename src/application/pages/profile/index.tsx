@@ -51,7 +51,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validat
   }
 
   return (
-  <AddressContext.Provider value={{ handleDelete, validation, updateAddress }}>
+  <AddressContext.Provider value={{ handleDelete, validation, updateAddress, reload: handleReload }}>
     <Default>
       <Container>
         <h1>Olá, {getCurrentAccount()?.name}</h1>

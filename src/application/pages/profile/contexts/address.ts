@@ -5,6 +5,7 @@ import { createContext } from 'react'
 type Props = {
   handleDelete: (id: string) => Promise<void>
   updateAddress: EditAddress
+  reload: () => void
   validation: Validator
 }
 

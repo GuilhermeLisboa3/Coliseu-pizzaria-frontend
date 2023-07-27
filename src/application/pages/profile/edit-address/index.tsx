@@ -14,7 +14,7 @@ import { useError } from '@/application/hooks'
 type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, address: Address }
 
 export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JSX.Element => {
-  const { validation, updateAddress } = useContext(AddressContext)
+  const { validation, updateAddress, reload } = useContext(AddressContext)
   const handleDeleteError = useError(error => toast.error(error.message))
 
   const [lodding, setLodding] = useState(false)
@@ -33,6 +33,8 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
       if (lodding || surnameError || numberError) return
       setLodding(true)
       await updateAddress({ id: address.id, number: Number(number), surname, complement })
+      setIsOpen(false)
+      reload()
     } catch (error: any) {
       handleDeleteError(error)
     } finally {
