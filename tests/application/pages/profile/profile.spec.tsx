@@ -232,5 +232,17 @@ describe('Profile', () => {
       expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
       expect(screen.getByTestId('edit-form')).toBeInTheDocument()
     })
+
+    it('should logout if updateAddress return UnauthorizedError', async () => {
+      makeSut()
+      updateAddress.mockRejectedValueOnce(new UnauthorizedError())
+
+      await openEditModal()
+      simulateSubmit()
+      await waitFor(async () => await screen.findByText(new UnauthorizedError().message))
+
+      expect(setSpy).toHaveBeenCalledWith(undefined)
+      expect(router.push).toHaveBeenCalledWith('/login')
+    })
   })
 })
