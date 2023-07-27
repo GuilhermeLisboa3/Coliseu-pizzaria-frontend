@@ -26,7 +26,7 @@ export const Address: React.FC<Props> = ({ address }): JSX.Element => {
             <RiDeleteBinLine onClick={() => { handleDelete(address.id) }} data-testid='icon-delete'/>
         </div>
       </Container>
-      <EditAddress isOpen={OpenModal}/>
+      <EditAddress isOpen={OpenModal} setIsOpen={setOpenModal}/>
     </>
   )
 }
