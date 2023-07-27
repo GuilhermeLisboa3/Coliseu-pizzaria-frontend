@@ -144,4 +144,19 @@ describe('Profile', () => {
       expect(screen.queryByTestId('address')).not.toBeInTheDocument()
     })
   })
+
+  describe('edit', () => {
+    const openEditModal = async (): Promise<void> => {
+      await waitFor(() => screen.getByTestId('address'))
+      fireEvent.click(screen.getByTestId('icon-edit'))
+    }
+    it('should open edit address modal when edit button is clicked', async () => {
+      makeSut()
+
+      await openEditModal()
+
+      expect(screen.getByTestId('edit-form')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Salvar/i })).toBeInTheDocument()
+    })
+  })
 })
