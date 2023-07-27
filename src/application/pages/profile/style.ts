@@ -4,7 +4,6 @@ import { Container as Cont } from 'reactstrap'
 import styled from 'styled-components'
 
 export const Container = styled(Cont)`
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
