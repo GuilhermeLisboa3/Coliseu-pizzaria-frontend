@@ -19,6 +19,7 @@ jest.mock('next/navigation', () => ({
 describe('Profile', () => {
   const listAddresses = jest.fn()
   const deleteAddress = jest.fn()
+  const updateAddress = jest.fn()
   const getSpy = jest.fn()
   const setSpy = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
@@ -31,7 +32,7 @@ describe('Profile', () => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
         <ToastContainer/>
-        <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator}/>
+        <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator} updateAddress={updateAddress}/>
       </AccountContext.Provider>
     )
   }
@@ -208,6 +209,16 @@ describe('Profile', () => {
       await waitFor(() => screen.getByTestId('edit-form'))
 
       expect(await screen.findByTestId('spinner')).toBeInTheDocument()
+    })
+
+    it('should call UpdateAddress with correct values', async () => {
+      makeSut()
+
+      await openEditModal()
+      simulateSubmit()
+      await waitFor(() => screen.getByTestId('edit-form'))
+
+      expect(updateAddress).toHaveBeenCalledWith({ id, surname, number, complement })
     })
   })
 })
