@@ -8,15 +8,16 @@ import { type Address as AddressModel } from '@/domain/models'
 import { AccountContext } from '@/application/contexts'
 import { useError } from '@/application/hooks'
 import { AddressContext } from '@/application/pages/profile/contexts'
+import { type Validator } from '@/application/validation'
 
 import { MdOutlineAdd } from 'react-icons/md'
 import Link from 'next/link'
 import React, { useState, useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-type Props = { listAddresses: ListAddresses, deleteAddress: DeleteAddress }
+type Props = { listAddresses: ListAddresses, deleteAddress: DeleteAddress, validation: Validator }
 
-export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.Element => {
+export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validation }): JSX.Element => {
   const { getCurrentAccount } = useContext(AccountContext)
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
@@ -50,7 +51,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress }): JSX.
   }
 
   return (
-  <AddressContext.Provider value={{ handleDelete }}>
+  <AddressContext.Provider value={{ handleDelete, validation }}>
     <Default>
       <Container>
         <h1>Olá, {getCurrentAccount()?.name}</h1>

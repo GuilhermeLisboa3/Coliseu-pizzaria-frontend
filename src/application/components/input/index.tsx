@@ -3,7 +3,7 @@ import { Container } from './style'
 import React from 'react'
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
-  setState: React.Dispatch<React.SetStateAction<string>>
+  setState: any
 }
 
 export const Input: React.FC<Props> = ({ name, placeholder, value, setState, type, ...props }): JSX.Element => {
