@@ -3,7 +3,7 @@ import { Button, Error } from '@/application/components'
 import { Container, Addresess } from './style'
 import { SkeletonAddress, Address } from './components'
 import { Default } from '@/application/layouts'
-import { type DeleteAddress, type ListAddresses } from '@/domain/use-cases/address'
+import { type EditAddress, type DeleteAddress, type ListAddresses } from '@/domain/use-cases/address'
 import { type Address as AddressModel } from '@/domain/models'
 import { AccountContext } from '@/application/contexts'
 import { useError } from '@/application/hooks'
@@ -15,9 +15,9 @@ import Link from 'next/link'
 import React, { useState, useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-type Props = { listAddresses: ListAddresses, deleteAddress: DeleteAddress, validation: Validator }
+type Props = { listAddresses: ListAddresses, deleteAddress: DeleteAddress, validation: Validator, updateAddress: EditAddress }
 
-export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validation }): JSX.Element => {
+export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validation, updateAddress }): JSX.Element => {
   const { getCurrentAccount } = useContext(AccountContext)
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
@@ -51,7 +51,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validat
   }
 
   return (
-  <AddressContext.Provider value={{ handleDelete, validation }}>
+  <AddressContext.Provider value={{ handleDelete, validation, updateAddress }}>
     <Default>
       <Container>
         <h1>Olá, {getCurrentAccount()?.name}</h1>

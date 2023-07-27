@@ -12,7 +12,7 @@ import React, { useState, useEffect, useContext } from 'react'
 type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, address: Address }
 
 export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JSX.Element => {
-  const { validation } = useContext(AddressContext)
+  const { validation, updateAddress } = useContext(AddressContext)
 
   const [lodding, setLodding] = useState(false)
   const [number, setNumber] = useState(address.number)
@@ -27,6 +27,7 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
   const handleEditAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     setLodding(true)
+    await updateAddress({ id: address.id, number: Number(number), surname, complement })
   }
 
   return (
