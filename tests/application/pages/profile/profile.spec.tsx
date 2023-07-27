@@ -185,5 +185,14 @@ describe('Profile', () => {
       expect(validator.validate).toHaveBeenCalledWith('number', { number })
       expect(validator.validate).toHaveBeenCalledWith('surname', { surname })
     })
+
+    it('should enable submit button if form is valid', async () => {
+      makeSut()
+
+      await openEditModal()
+      populateFields()
+
+      expect(screen.getByRole('button', { name: /Salvar/i })).toBeEnabled()
+    })
   })
 })
