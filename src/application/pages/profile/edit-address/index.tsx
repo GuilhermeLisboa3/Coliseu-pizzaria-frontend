@@ -27,6 +27,7 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
   const handleEditAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     setLodding(true)
+    if (lodding || surnameError || numberError) return
     await updateAddress({ id: address.id, number: Number(number), surname, complement })
   }
 
