@@ -8,6 +8,7 @@ import './style.css'
 import { AiOutlineClose } from 'react-icons/ai'
 import Modal from 'react-modal'
 import React, { useState, useEffect, useContext } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, address: Address }
 
@@ -26,9 +27,15 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
 
   const handleEditAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    setLodding(true)
-    if (lodding || surnameError || numberError) return
-    await updateAddress({ id: address.id, number: Number(number), surname, complement })
+    try {
+      if (lodding || surnameError || numberError) return
+      setLodding(true)
+      await updateAddress({ id: address.id, number: Number(number), surname, complement })
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLodding(false)
+    }
   }
 
   return (
