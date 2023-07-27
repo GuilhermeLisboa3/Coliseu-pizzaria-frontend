@@ -9,11 +9,13 @@ import { AiOutlineClose } from 'react-icons/ai'
 import Modal from 'react-modal'
 import React, { useState, useEffect, useContext } from 'react'
 import { toast } from 'react-toastify'
+import { useError } from '@/application/hooks'
 
 type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>, address: Address }
 
 export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JSX.Element => {
   const { validation, updateAddress } = useContext(AddressContext)
+  const handleDeleteError = useError(error => toast.error(error.message))
 
   const [lodding, setLodding] = useState(false)
   const [number, setNumber] = useState(address.number)
@@ -32,7 +34,7 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
       setLodding(true)
       await updateAddress({ id: address.id, number: Number(number), surname, complement })
     } catch (error: any) {
-      toast.error(error.message)
+      handleDeleteError(error)
     } finally {
       setLodding(false)
     }
