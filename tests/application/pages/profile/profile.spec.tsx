@@ -24,7 +24,7 @@ describe('Profile', () => {
   const setSpy = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
-  const { surname, complement, neighborhood, street, zipCode, number, id } = addressParams
+  const { surname, complement, neighborhood, street, zipCode, number, id, error } = addressParams
   const { name, accessToken } = AccountParams
   const validator = mock<Validator>()
 
@@ -219,6 +219,17 @@ describe('Profile', () => {
       await waitFor(() => screen.getByTestId('edit-form'))
 
       expect(updateAddress).toHaveBeenCalledWith({ id, surname, number, complement })
+    })
+
+    it('should not call UpdateAddress if form is invalid', async () => {
+      makeSut()
+      validator.validate.mockReturnValueOnce(error)
+
+      await openEditModal()
+      populateFields()
+      fireEvent.submit(screen.getByTestId('edit-form'))
+
+      expect(updateAddress).not.toHaveBeenCalled()
     })
   })
 })
