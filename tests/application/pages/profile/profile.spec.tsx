@@ -1,12 +1,13 @@
-import { addressParams, AccountParams } from '@/tests/mocks'
+import { addressParams, AccountParams, populateField } from '@/tests/mocks'
 import { Profile } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
-import { AddressContext } from '@/application/pages/profile/contexts'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
+import { type Validator } from '@/application/validation'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ToastContainer } from 'react-toastify'
 import React from 'react'
+import { mock } from 'jest-mock-extended'
 
 jest.mock('next/navigation', () => ({
   useRouter () {
@@ -24,14 +25,13 @@ describe('Profile', () => {
   const router = { push: jest.fn() }
   const { surname, complement, neighborhood, street, zipCode, number, id } = addressParams
   const { name, accessToken } = AccountParams
+  const validator = mock<Validator>()
 
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
-        <AddressContext.Provider value={{ handleDelete: jest.fn() }}>
-          <ToastContainer/>
-          <Profile listAddresses={listAddresses} deleteAddress={deleteAddress}/>
-        </AddressContext.Provider>
+        <ToastContainer/>
+        <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator}/>
       </AccountContext.Provider>
     )
   }
@@ -150,6 +150,13 @@ describe('Profile', () => {
       await waitFor(() => screen.getByTestId('address'))
       fireEvent.click(screen.getByTestId('icon-edit'))
     }
+
+    const populateFields = (): void => {
+      populateField('surname', surname)
+      populateField('complement', complement)
+      populateField('number', number.toString())
+    }
+
     it('should open edit address modal when edit button is clicked', async () => {
       makeSut()
 
@@ -157,6 +164,26 @@ describe('Profile', () => {
 
       expect(screen.getByTestId('edit-form')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /Salvar/i })).toBeInTheDocument()
+    })
+
+    it('should remove edit address modal if click button close', async () => {
+      makeSut()
+
+      await openEditModal()
+      fireEvent.click(screen.getByTestId('close-modal'))
+
+      expect(screen.queryByTestId('edit-form')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: /Salvar/i })).not.toBeInTheDocument()
+    })
+
+    it('should call validation with correct values', async () => {
+      makeSut()
+
+      await openEditModal()
+      populateFields()
+
+      expect(validator.validate).toHaveBeenCalledWith('number', { number })
+      expect(validator.validate).toHaveBeenCalledWith('surname', { surname })
     })
   })
 })
