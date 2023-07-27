@@ -157,6 +157,11 @@ describe('Profile', () => {
       populateField('number', number.toString())
     }
 
+    const simulateSubmit = (): void => {
+      populateFields()
+      fireEvent.click(screen.getByRole('button', { name: /Salvar/i }))
+    }
+
     it('should open edit address modal when edit button is clicked', async () => {
       makeSut()
 
@@ -193,6 +198,16 @@ describe('Profile', () => {
       populateFields()
 
       expect(screen.getByRole('button', { name: /Salvar/i })).toBeEnabled()
+    })
+
+    it('should show spinner on submit', async () => {
+      makeSut()
+
+      await openEditModal()
+      simulateSubmit()
+      await waitFor(() => screen.getByTestId('edit-form'))
+
+      expect(await screen.findByTestId('spinner')).toBeInTheDocument()
     })
   })
 })
