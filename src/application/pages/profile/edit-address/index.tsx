@@ -15,9 +15,9 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
   const { validation } = useContext(AddressContext)
 
   const [number, setNumber] = useState(address.number)
-  const [, setNumberError] = useState<string | undefined>('')
+  const [numberError, setNumberError] = useState<string | undefined>('')
   const [surname, setSurname] = useState(address.surname)
-  const [, setSurnameError] = useState<string | undefined>('')
+  const [surnameError, setSurnameError] = useState<string | undefined>('')
   const [complement, setComplement] = useState(address.complement)
 
   useEffect(() => setNumberError(validation.validate('number', { number })), [number])
@@ -32,7 +32,7 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
           <Input placeholder="Número" type='text' name='number' value={number} setState={setNumber}/>
         </div>
           <Input placeholder="Complemento" type='text' name='complement' value={complement} setState={setComplement}/>
-          <Button>Salvar</Button>
+          <Button type='submit' disabled={!!numberError || !!surnameError}>Salvar</Button>
       </Form>
     </Modal>
   )
