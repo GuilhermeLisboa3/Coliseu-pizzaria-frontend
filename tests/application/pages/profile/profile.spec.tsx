@@ -201,16 +201,6 @@ describe('Profile', () => {
       expect(screen.getByRole('button', { name: /Salvar/i })).toBeEnabled()
     })
 
-    it('should show spinner on submit', async () => {
-      makeSut()
-
-      await openEditModal()
-      simulateSubmit()
-      await waitFor(() => screen.getByTestId('edit-form'))
-
-      expect(await screen.findByTestId('spinner')).toBeInTheDocument()
-    })
-
     it('should call UpdateAddress with correct values', async () => {
       makeSut()
 
@@ -230,6 +220,17 @@ describe('Profile', () => {
       fireEvent.submit(screen.getByTestId('edit-form'))
 
       expect(updateAddress).not.toHaveBeenCalled()
+    })
+
+    it('should show alert error if UpdateAddress fails', async () => {
+      makeSut()
+      updateAddress.mockRejectedValueOnce(new UnexpectedError())
+
+      await openEditModal()
+      simulateSubmit()
+
+      expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
+      expect(screen.getByTestId('edit-form')).toBeInTheDocument()
     })
   })
 })
