@@ -15,7 +15,7 @@ type Props = { validation: Validator, searchAddress: SearchAddress, addAddress: 
 export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddress }): JSX.Element => {
   const { push } = useRouter()
   const [showFormSearch, setShowFormSearch] = useState(true)
-  const [lodding, setLodding] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const [zipCode, setZipCode] = useState<string>('')
   const [zipCodeError, setZipCodeError] = useState<string | undefined>('')
@@ -33,9 +33,9 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
 
   const handleSearchAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (lodding || zipCodeError) return
+    if (loading || zipCodeError) return
     try {
-      setLodding(true)
+      setLoading(true)
       const { neighborhood, street } = await searchAddress({ zipCode })
       setNeighborhood(neighborhood)
       setStreet(street)
@@ -43,19 +43,19 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
     } catch (error: any) {
       toast.error(error.message)
     } finally {
-      setLodding(false)
+      setLoading(false)
     }
   }
 
   const handlAddAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (lodding || surnameError || numberError) return
+    if (loading || surnameError || numberError) return
     try {
-      setLodding(true)
+      setLoading(true)
       await addAddress({ surname, complement, neighborhood, zipCode, number: Number(number), street })
       push('/profile')
     } catch (error: any) {
-      setLodding(false)
+      setLoading(false)
       toast.error(error.message)
     }
   }
@@ -68,7 +68,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
         { showFormSearch
           ? <form onSubmit={handleSearchAddress} data-testid='search-form'>
               <Input placeholder="Digite seu cep" type='text' name='cep' setState={setZipCode}/>
-              <Button type='submit' disabled={!!zipCodeError}>{ lodding ? <Spinner/> : 'Buscar'}</Button>
+              <Button type='submit' disabled={!!zipCodeError}>{ loading ? <Spinner/> : 'Buscar'}</Button>
           </form>
           : <form onSubmit={handlAddAddress} data-testid='add-form'>
               <div>
@@ -79,7 +79,7 @@ export const AddAddress: React.FC<Props> = ({ validation, searchAddress, addAddr
             <Input placeholder="Bairro" type='text' name='neighborhood' setState={setNeighborhood} value={neighborhood} readOnly/>
             <Input placeholder="Rua" type='text' name='street' setState={setStreet} value={street} readOnly/>
             <Input placeholder="Complemento" type='text' name='complement' setState={setComplement}/>
-            <Button type='submit' disabled={!!numberError || !!surnameError}>{ lodding ? <Spinner/> : 'Salvar'}</Button>
+            <Button type='submit' disabled={!!numberError || !!surnameError}>{ loading ? <Spinner/> : 'Salvar'}</Button>
           </form>
         }
       </section>

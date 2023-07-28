@@ -12,7 +12,13 @@ export const Form = styled.form`
     gap: 20px;
   }
 
+  div:nth-child(3) {
+    margin-top: 10px;
+    gap: 5px;
+  }
+
+
   button {
-    margin: 20px auto;
+    margin: 10px auto 20px;
   }
 `

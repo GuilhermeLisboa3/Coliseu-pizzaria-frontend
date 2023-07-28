@@ -17,12 +17,13 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
   const { validation, updateAddress, reload } = useContext(AddressContext)
   const handleDeleteError = useError(error => toast.error(error.message))
 
-  const [lodding, setLodding] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [number, setNumber] = useState(address.number)
   const [numberError, setNumberError] = useState<string | undefined>('')
   const [surname, setSurname] = useState(address.surname)
   const [surnameError, setSurnameError] = useState<string | undefined>('')
   const [complement, setComplement] = useState(address.complement)
+  const [active, setActive] = useState<boolean>(address.active)
 
   useEffect(() => setNumberError(validation.validate('number', { number })), [number])
   useEffect(() => setSurnameError(validation.validate('surname', { surname })), [surname])
@@ -30,15 +31,15 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
   const handleEditAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
-      if (lodding || surnameError || numberError) return
-      setLodding(true)
-      await updateAddress({ id: address.id, number: Number(number), surname, complement })
+      if (loading || surnameError || numberError) return
+      setLoading(true)
+      await updateAddress({ id: address.id, number: Number(number), surname, complement, active })
       setIsOpen(false)
       reload()
     } catch (error: any) {
       handleDeleteError(error)
     } finally {
-      setLodding(false)
+      setLoading(false)
     }
   }
 
@@ -51,7 +52,13 @@ export const EditAddress: React.FC<Props> = ({ isOpen, setIsOpen, address }): JS
           <Input placeholder="Número" type='text' name='number' value={number} setState={setNumber}/>
         </div>
           <Input placeholder="Complemento" type='text' name='complement' value={complement} setState={setComplement}/>
-          <Button type='submit' disabled={!!numberError || !!surnameError}>{ lodding ? <Spinner/> : 'Salvar'}</Button>
+        <div>
+          <input type="checkbox" name="active" id='active' data-testid='active' defaultChecked={address.active} onChange={ e => {
+            setActive(!address.active)
+          }}/>
+          <label htmlFor="active">Definir como principal</label>
+        </div>
+          <Button type='submit' disabled={!!numberError || !!surnameError}>{ loading ? <Spinner/> : 'Salvar'}</Button>
       </Form>
     </Modal>
   )

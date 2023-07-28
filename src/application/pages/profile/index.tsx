@@ -22,7 +22,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validat
   const [addresses, setAddresses] = useState<AddressModel[] | undefined>(undefined)
   const [error, setError] = useState<string | undefined>(undefined)
   const [reload, setReload] = useState(true)
-  const [lodding, setLodding] = useState(false)
+  const [loading, setLoading] = useState(false)
   const handleError = useError(error => setError(error.message))
   const handleDeleteError = useError(error => toast.error(error.message))
 
@@ -38,15 +38,15 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validat
   }
 
   const handleDelete = async (id: string): Promise<void> => {
-    if (lodding) return
+    if (loading) return
     try {
-      setLodding(true)
+      setLoading(true)
       await deleteAddress({ id })
       setAddresses(addresses?.filter(address => address.id !== id))
     } catch (error: any) {
       handleDeleteError(error)
     } finally {
-      setLodding(false)
+      setLoading(false)
     }
   }
 

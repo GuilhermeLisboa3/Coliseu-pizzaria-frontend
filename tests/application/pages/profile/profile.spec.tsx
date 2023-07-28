@@ -156,6 +156,7 @@ describe('Profile', () => {
       populateField('surname', surname)
       populateField('complement', complement)
       populateField('number', number.toString())
+      fireEvent.click(screen.getByTestId('active'))
     }
 
     const simulateSubmit = (): void => {
@@ -208,7 +209,7 @@ describe('Profile', () => {
       simulateSubmit()
       await waitFor(() => screen.getByTestId('edit-form'))
 
-      expect(updateAddress).toHaveBeenCalledWith({ id, surname, number, complement })
+      expect(updateAddress).toHaveBeenCalledWith({ id, surname, number, complement, active: false })
     })
 
     it('should not call UpdateAddress if form is invalid', async () => {
