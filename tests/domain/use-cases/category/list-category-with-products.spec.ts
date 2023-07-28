@@ -1,17 +1,18 @@
 import { type ListCategoryWithProducts, listCategoryWithProductsUseCase } from '@/domain/use-cases/category'
 import { type HttpClient } from '@/domain/contracts/http'
-import { httpClientParams } from '@/tests/mocks'
+import { httpClientParams, productParams } from '@/tests/mocks'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 import { mock } from 'jest-mock-extended'
 
 describe('listCategoryWithProductsUseCase', () => {
   const { url } = httpClientParams
+  const { available, description, id, name, picture, price } = productParams
   let sut: ListCategoryWithProducts
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200, data: {} })
+    httpClient.request.mockResolvedValue({ statusCode: 200, data: [{ id: '1', name: 'name', products: [{ available, description, id, name, picture, price }] }] })
   })
 
   beforeEach(() => {
@@ -39,5 +40,13 @@ describe('listCategoryWithProductsUseCase', () => {
     const promise = sut()
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return categories with products on success', async () => {
+    const result = await sut()
+
+    expect(result).toEqual([{
+      id: '1', name: 'name', products: [{ available, description, id, name, picture, price }]
+    }])
   })
 })
