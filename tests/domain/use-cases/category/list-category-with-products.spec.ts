@@ -1,7 +1,7 @@
 import { type ListCategoryWithProducts, listCategoryWithProductsUseCase } from '@/domain/use-cases/category'
 import { type HttpClient } from '@/domain/contracts/http'
 import { httpClientParams } from '@/tests/mocks'
-import { UnauthorizedError } from '@/domain/errors'
+import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 import { mock } from 'jest-mock-extended'
 
@@ -31,5 +31,13 @@ describe('listCategoryWithProductsUseCase', () => {
     const promise = sut()
 
     await expect(promise).rejects.toThrow(new UnauthorizedError())
+  })
+
+  it('should throw UnauthorizedError if HttpClient return 500', async () => {
+    httpClient.request.mockResolvedValueOnce({ statusCode: 500 })
+
+    const promise = sut()
+
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
