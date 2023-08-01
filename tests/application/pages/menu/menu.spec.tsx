@@ -5,10 +5,12 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 describe('Menu', () => {
+  const listCategoryWithProducts = jest.fn()
+
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <Menu />
+        <Menu listCategoryWithProducts={listCategoryWithProducts}/>
       </AccountContext.Provider>
     )
   }
@@ -17,5 +19,12 @@ describe('Menu', () => {
     makeSut()
 
     expect(screen.getAllByTestId('skeleton')).toHaveLength(2)
+  })
+
+  it('should call listCategoryWithProducts', async () => {
+    makeSut()
+
+    expect(listCategoryWithProducts).toHaveBeenCalled()
+    expect(listCategoryWithProducts).toHaveBeenCalledTimes(1)
   })
 })
