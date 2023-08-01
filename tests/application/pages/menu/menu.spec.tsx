@@ -4,6 +4,7 @@ import { AccountContext } from '@/application/contexts'
 
 import { render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
+import { UnexpectedError } from '@/domain/errors'
 
 describe('Menu', () => {
   const { available, description, categoryId, id, name, picture, price } = productParams
@@ -43,5 +44,15 @@ describe('Menu', () => {
     await waitFor(() => screen.getByRole('list'))
 
     expect(screen.getByText(name)).toBeInTheDocument()
+  })
+
+  it('should render error on UnexpectedError', async () => {
+    listCategoryWithProducts.mockRejectedValueOnce(new UnexpectedError())
+
+    makeSut()
+    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
   })
 })
