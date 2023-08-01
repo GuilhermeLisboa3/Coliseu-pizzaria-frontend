@@ -2,13 +2,22 @@ import { productParams } from '@/tests/mocks'
 import { Menu } from '@/application/pages'
 import { AccountContext } from '@/application/contexts'
 
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { UnexpectedError } from '@/domain/errors'
+
+jest.mock('next/navigation', () => ({
+  useRouter () {
+    return ({ push: jest.fn() })
+  },
+  usePathname () {}
+}))
 
 describe('Menu', () => {
   const { available, description, categoryId, id, name, picture, price } = productParams
   const listCategoryWithProducts = jest.fn()
+  const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
+  const router = { push: jest.fn() }
 
   const makeSut = (): void => {
     render(
@@ -19,6 +28,7 @@ describe('Menu', () => {
   }
 
   beforeAll(() => {
+    useRouter.mockReturnValue(router)
     listCategoryWithProducts.mockResolvedValue([{ id: '1', name: 'any_title', products: [{ available, description, id, name, picture, price, categoryId }] }])
   })
 
@@ -54,5 +64,16 @@ describe('Menu', () => {
 
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
     expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
+  })
+
+  it('should call listCategories on reload', async () => {
+    listCategoryWithProducts.mockRejectedValueOnce(new UnexpectedError())
+
+    makeSut()
+    await waitFor(() => screen.getByRole('button', { name: /Tentar novamente/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/i }))
+
+    expect(listCategoryWithProducts).toHaveBeenCalledTimes(2)
+    await waitFor(() => screen.getByTestId('title-menu'))
   })
 })
