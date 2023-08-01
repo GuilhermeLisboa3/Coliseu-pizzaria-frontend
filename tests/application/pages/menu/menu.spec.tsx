@@ -4,7 +4,7 @@ import { AccountContext } from '@/application/contexts'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
-import { UnexpectedError } from '@/domain/errors'
+import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
 jest.mock('next/navigation', () => ({
   useRouter () {
@@ -16,12 +16,13 @@ jest.mock('next/navigation', () => ({
 describe('Menu', () => {
   const { available, description, categoryId, id, name, picture, price } = productParams
   const listCategoryWithProducts = jest.fn()
+  const setSpy = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
 
   const makeSut = (): void => {
     render(
-      <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
+      <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: jest.fn() }}>
         <Menu listCategoryWithProducts={listCategoryWithProducts}/>
       </AccountContext.Provider>
     )
@@ -66,7 +67,7 @@ describe('Menu', () => {
     expect(screen.getByText(new UnexpectedError().message)).toBeInTheDocument()
   })
 
-  it('should call listCategories on reload', async () => {
+  it('should call listCategoryWithProducts on reload', async () => {
     listCategoryWithProducts.mockRejectedValueOnce(new UnexpectedError())
 
     makeSut()
@@ -75,5 +76,15 @@ describe('Menu', () => {
 
     expect(listCategoryWithProducts).toHaveBeenCalledTimes(2)
     await waitFor(() => screen.getByTestId('title-menu'))
+  })
+
+  it('should logout if listCategories return UnauthorizedError', async () => {
+    listCategoryWithProducts.mockRejectedValueOnce(new UnauthorizedError())
+    makeSut()
+
+    await waitFor(() => screen.getByTestId('title-menu'))
+
+    expect(setSpy).toHaveBeenCalledWith(undefined)
+    expect(router.push).toHaveBeenCalledWith('/login')
   })
 })
