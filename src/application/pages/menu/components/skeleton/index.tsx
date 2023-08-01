@@ -6,7 +6,7 @@ import React from 'react'
 export const Skeleton: React.FC = (): JSX.Element => {
   return (
     <>
-      <Container>
+      <Container data-testid='skeleton'>
         <ul>
           <Product>
             <div>
@@ -25,7 +25,7 @@ export const Skeleton: React.FC = (): JSX.Element => {
           </Product>
         </ul>
       </Container>
-      <Container>
+      <Container data-testid='skeleton'>
         <ul>
           <Product>
             <div>
