@@ -102,7 +102,7 @@ export const Section = styled(Cont)`
       justify-content: center;
       position: fixed;
       width: 100%;
-      height: ${props => props.visible ? '100%' : '0'};
+      height: ${props => props.$visible ? '100%' : '0'};
       overflow: hidden;
       top: 0;
       left: 0;

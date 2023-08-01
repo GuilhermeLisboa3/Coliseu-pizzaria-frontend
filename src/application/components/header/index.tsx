@@ -21,7 +21,7 @@ export const Header: React.FC = (): JSX.Element => {
       <img src={logo.src} alt="logo" />
       <nav>
         <Link href={'/'} className={pathName('/')}>Home</Link>
-        <Link href={'/'} className={pathName('/menu')}>Cardápio</Link>
+        <Link href={'/menu'} className={pathName('/menu')}>Cardápio</Link>
       </nav>
       <div>
         <Link href={'#'}>

@@ -1,5 +1,5 @@
 'use client'
-import { colors } from '@/application/styles'
+import { colors, shimmer } from '@/application/styles'
 import styled from 'styled-components'
 
 export const Container = styled.div`
@@ -13,6 +13,8 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 
   background: no-repeat;
   background-image:
@@ -33,6 +35,18 @@ export const Container = styled.div`
     25% 0.875rem,
     1.5rem 1.8rem,
     1.5rem 1.8rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background-image: linear-gradient(to right, transparent, #F7F8FA, transparent);
+      animation: ${shimmer} 1.2s infinite;
+    }
 
     @media (max-width: 991px) {
       width: 100%;
