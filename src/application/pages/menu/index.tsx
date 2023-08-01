@@ -6,6 +6,7 @@ import { type Product } from '@/domain/models'
 import { type ListCategoryWithProducts } from '@/domain/use-cases/category'
 
 import React, { useEffect, useState } from 'react'
+import { Error } from '@/application/components'
 
 type Props = {
   listCategoryWithProducts: ListCategoryWithProducts
@@ -13,18 +14,31 @@ type Props = {
 
 export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element => {
   const [categories, setCategories] = useState<Array<{ id: string, name: string, products: Product[] }>>([])
+  const [reload, setReload] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleReload = (): void => {
+    setReload(!reload)
+  }
+
   useEffect(() => {
-    listCategoryWithProducts().then(category => setCategories(category))
-  }, [])
+    listCategoryWithProducts().then(category => setCategories(category)).catch(error => setError(error.message))
+  }, [reload])
 
   return (
     <>
       <Default>
         <Container>
           <h1 data-testid='title-menu'>Cardápio</h1>
-          { categories.length > 0
-            ? <Category categories={categories}/>
-            : <Skeleton/>
+          {
+            error
+              ? <Error error={error} reload={handleReload}/>
+              : <>
+              { categories.length > 0
+                ? <Category categories={categories}/>
+                : <Skeleton/>
+              }
+            </>
           }
         </Container>
       </Default>
