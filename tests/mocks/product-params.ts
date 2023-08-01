@@ -2,6 +2,7 @@ import faker from 'faker'
 
 export const productParams = {
   id: faker.datatype.uuid(),
+  categoryId: faker.datatype.uuid(),
   name: faker.name.findName(),
   description: faker.random.words(20),
   price: faker.datatype.float({ max: 100 }),
