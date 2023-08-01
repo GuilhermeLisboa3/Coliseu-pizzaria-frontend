@@ -1,24 +1,31 @@
 'use client'
 import { Default } from '@/application/layouts'
 import { Container } from './style'
-import { Skeleton } from './components'
+import { Skeleton, Category } from './components'
+import { type Product } from '@/domain/models'
 import { type ListCategoryWithProducts } from '@/domain/use-cases/category'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   listCategoryWithProducts: ListCategoryWithProducts
 }
 
 export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element => {
-  useEffect(() => { listCategoryWithProducts() }, [])
+  const [categories, setCategories] = useState<Array<{ id: string, name: string, products: Product[] }>>([])
+  useEffect(() => {
+    listCategoryWithProducts().then(category => setCategories(category))
+  }, [])
 
   return (
     <>
       <Default>
         <Container>
-          <h1>Cardápio</h1>
-          <Skeleton/>
+          <h1 data-testid='title-menu'>Cardápio</h1>
+          { categories.length > 0
+            ? <Category categories={categories}/>
+            : <Skeleton/>
+          }
         </Container>
       </Default>
     </>
