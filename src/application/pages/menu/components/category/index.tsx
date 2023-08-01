@@ -15,7 +15,7 @@ export const Category: React.FC<Props> = ({ categories }): JSX.Element => {
             <h2>{category.name}</h2>
             <ul>
               { category.products.map(product => (
-                <Product key={product.id} product={product}/>
+                <Product key={product.id} product={product} categoryName={category.name}/>
               ))}
             </ul>
           </Container>

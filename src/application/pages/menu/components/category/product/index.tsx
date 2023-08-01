@@ -5,13 +5,13 @@ import React from 'react'
 import { type Product as ProductModel } from '@/domain/models'
 import { formatPrice } from '@/application/utils'
 
-type Props = { product: ProductModel }
+type Props = { product: ProductModel, categoryName: string }
 
-export const Product: React.FC<Props> = ({ product }): JSX.Element => {
+export const Product: React.FC<Props> = ({ product, categoryName }): JSX.Element => {
   return (
     <Container>
       <section>
-        <img src={product.picture} alt={product.name} />
+        <img src={product.picture} alt={product.name} className={categoryName}/>
         <h3>{product.name}</h3>
         <hr />
         <p>{ product.description.length > 100 ? `${product.description.substring(0, 100)}...` : product.description}</p>

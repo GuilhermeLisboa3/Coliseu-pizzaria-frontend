@@ -24,12 +24,12 @@ export const Container = styled.li`
       margin: 10px auto;
     }
 
-    img.sobremesas {
+    img.Sobremesas {
       width: 75px;
       height: 111px;
     }
 
-    img.bebidas {
+    img.Bebidas {
       width: 40px;
       height: 111px;
     }

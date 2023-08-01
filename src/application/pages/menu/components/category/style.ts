@@ -10,6 +10,7 @@ export const Container = styled.div`
     margin-top: 30px;
     display: flex;
     flex-wrap: wrap;
+    padding: 0;
     gap: 4rem;
   }
 
@@ -17,7 +18,6 @@ export const Container = styled.div`
     ul {
       justify-content: center;
       align-items: center;
-      padding: 0;
     }
   }
 `
