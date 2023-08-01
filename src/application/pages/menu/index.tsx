@@ -4,6 +4,7 @@ import { Container } from './style'
 import { Skeleton, Category } from './components'
 import { type Product } from '@/domain/models'
 import { type ListCategoryWithProducts } from '@/domain/use-cases/category'
+import { useError } from '@/application/hooks'
 
 import React, { useEffect, useState } from 'react'
 import { Error } from '@/application/components'
@@ -16,13 +17,14 @@ export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element
   const [categories, setCategories] = useState<Array<{ id: string, name: string, products: Product[] }>>([])
   const [reload, setReload] = useState(false)
   const [error, setError] = useState('')
+  const handleError = useError(error => setError(error.message))
 
   const handleReload = (): void => {
     setReload(!reload)
   }
 
   useEffect(() => {
-    listCategoryWithProducts().then(category => setCategories(category)).catch(error => setError(error.message))
+    listCategoryWithProducts().then(category => setCategories(category)).catch(error => handleError(error))
   }, [reload])
 
   return (
