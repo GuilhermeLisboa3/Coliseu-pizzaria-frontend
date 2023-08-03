@@ -28,3 +28,9 @@
 svg {
   font-size: 1.4rem;
 }
+
+@media (max-width: 510px) {
+  .react-modal {
+    width: 95%;
+  }
+}

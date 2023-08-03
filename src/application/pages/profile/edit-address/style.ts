@@ -21,4 +21,9 @@ export const Form = styled.form`
   button {
     margin: 10px auto 20px;
   }
+
+  @media (max-width: 510px) {
+    margin: 10px;
+    width: 95%;
+  }
 `
