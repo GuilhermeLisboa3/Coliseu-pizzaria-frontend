@@ -12,7 +12,7 @@ describe('addCartUseCase', () => {
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
-    httpClient.request.mockResolvedValue({ statusCode: 200, data: null })
+    httpClient.request.mockResolvedValue({ statusCode: 200, data: {} })
   })
 
   beforeEach(() => {
@@ -40,5 +40,11 @@ describe('addCartUseCase', () => {
     const promise = sut({ id })
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('should return true on success', async () => {
+    const result = await sut({ id })
+
+    expect(result).toBeTruthy()
   })
 })
