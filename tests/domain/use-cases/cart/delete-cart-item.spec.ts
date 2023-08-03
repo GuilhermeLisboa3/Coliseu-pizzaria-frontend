@@ -1,14 +1,14 @@
-import { type DeleteCart, deleteCartUseCase } from '@/domain/use-cases/cart'
+import { type DeleteCartItem, deleteCartItemUseCase } from '@/domain/use-cases/cart'
 import { type HttpClient } from '@/domain/contracts/http'
 import { httpClientParams, productParams } from '@/tests/mocks'
 
 import { mock } from 'jest-mock-extended'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
-describe('deleteCartUseCase', () => {
+describe('deleteCartItemUseCase', () => {
   const { url } = httpClientParams
   const { id } = productParams
-  let sut: DeleteCart
+  let sut: DeleteCartItem
   const httpClient = mock<HttpClient>()
 
   beforeAll(() => {
@@ -16,7 +16,7 @@ describe('deleteCartUseCase', () => {
   })
 
   beforeEach(() => {
-    sut = deleteCartUseCase(url, httpClient)
+    sut = deleteCartItemUseCase(url, httpClient)
   })
 
   it('should call HttpClient with correct values', async () => {
