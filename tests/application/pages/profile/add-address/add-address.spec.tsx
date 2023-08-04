@@ -30,7 +30,7 @@ describe('AddAddress', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <CartProvider getCart={getCart} addCartItem={jest.fn()}>
+        <CartProvider getCart={getCart} addCartItem={jest.fn()} deleteCartItem={jest.fn()}>
           <ToastContainer/>
           <AddAddress validation={validator} searchAddress={searchAddress} addAddress={addAddress}/>
         </CartProvider>

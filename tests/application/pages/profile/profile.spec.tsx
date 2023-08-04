@@ -32,7 +32,7 @@ describe('Profile', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
-        <CartProvider getCart={getCart} addCartItem={jest.fn()}>
+        <CartProvider getCart={getCart} addCartItem={jest.fn()} deleteCartItem={jest.fn()}>
           <ToastContainer/>
           <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator} updateAddress={updateAddress}/>
         </CartProvider>
