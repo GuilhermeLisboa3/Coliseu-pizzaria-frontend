@@ -11,8 +11,7 @@ export const Container = styled.div<{ $isOpen: boolean }>`
   right: 0;
   transition: 0.3s;
   background: ${colors.white};
-  box-shadow: 0px 2px 3px -1px ${colors.black};
-  padding: 15px;
+  box-shadow: 0px 2px 3px -1px ${colors.black}; 
   z-index: 3;
   display: flex;
   flex-direction: column;
@@ -22,7 +21,7 @@ export const Container = styled.div<{ $isOpen: boolean }>`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 0px 5px 20px 0;
+    padding: 0px 20px 35px 15px;
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -37,6 +36,7 @@ export const HeaderCart = styled.div`
   gap: 30px;
   font-weight: bolder;
   margin-bottom: 10px;
+  padding: 15px;
   svg {
     font-size: 1.6rem;
     cursor: pointer;
@@ -50,6 +50,7 @@ export const HeaderCart = styled.div`
 export const FooterCart = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 15px;
   p{
     margin: 0;
     font-weight: bold;

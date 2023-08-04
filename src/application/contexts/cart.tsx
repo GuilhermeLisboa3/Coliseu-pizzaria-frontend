@@ -1,3 +1,4 @@
+'use client'
 import { type GetCart } from '@/domain/use-cases/cart'
 
 import React, { createContext, type ReactNode, useState, useEffect } from 'react'

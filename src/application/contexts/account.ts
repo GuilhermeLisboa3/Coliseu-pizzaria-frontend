@@ -1,3 +1,4 @@
+'use client'
 import { type Account } from '@/domain/models'
 import { createContext } from 'react'
 
