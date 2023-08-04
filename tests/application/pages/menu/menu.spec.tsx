@@ -128,13 +128,24 @@ describe('Menu', () => {
       expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
     })
 
-    it('should call addCart when click icon cart', async () => {
+    it('should call addCart when click product-add-cart', async () => {
       makeSut()
 
       await waitFor(() => screen.getByTestId('title-menu'))
       fireEvent.click(screen.getByTestId('product-add-cart'))
       expect(addCartItem).toHaveBeenCalledWith({ id })
       expect(addCartItem).toHaveBeenCalledTimes(1)
+      await waitFor(() => screen.getByText('any_name'))
+    })
+
+    it('should call addCart when click add-cart', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('add-cart'))
+      expect(addCartItem).toHaveBeenCalledWith({ id })
+      expect(addCartItem).toHaveBeenCalledTimes(1)
+      expect(screen.getByText('3')).toBeInTheDocument()
       await waitFor(() => screen.getByText('any_name'))
     })
 
