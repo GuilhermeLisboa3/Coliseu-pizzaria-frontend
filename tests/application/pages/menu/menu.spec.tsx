@@ -18,6 +18,7 @@ describe('Menu', () => {
   const { available, description, categoryId, id, name, picture, price } = productParams
   const listCategoryWithProducts = jest.fn()
   const getCart = jest.fn()
+  const addCartItem = jest.fn()
   const setSpy = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
@@ -25,7 +26,7 @@ describe('Menu', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: jest.fn() }}>
-        <CartProvider getCart={getCart}>
+        <CartProvider getCart={getCart} addCartItem={addCartItem}>
           <ToastContainer/>
           <Menu listCategoryWithProducts={listCategoryWithProducts}/>
         </CartProvider>
@@ -125,6 +126,15 @@ describe('Menu', () => {
 
       await waitFor(() => screen.getByTestId('title-menu'))
       expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
+    })
+
+    it('should call addCart when click icon cart', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('product-add-cart'))
+      expect(addCartItem).toHaveBeenCalledWith({ id })
+      expect(addCartItem).toHaveBeenCalledTimes(1)
     })
   })
 })
