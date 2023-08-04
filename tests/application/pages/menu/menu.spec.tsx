@@ -5,6 +5,7 @@ import { AccountContext, CartProvider } from '@/application/contexts'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
+import { ToastContainer } from 'react-toastify'
 
 jest.mock('next/navigation', () => ({
   useRouter () {
@@ -25,6 +26,7 @@ describe('Menu', () => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: jest.fn() }}>
         <CartProvider getCart={getCart}>
+          <ToastContainer/>
           <Menu listCategoryWithProducts={listCategoryWithProducts}/>
         </CartProvider>
       </AccountContext.Provider>
@@ -115,6 +117,14 @@ describe('Menu', () => {
       fireEvent.click(screen.getByTestId('cart'))
       expect(screen.getByText('any_name')).toBeInTheDocument()
       expect(screen.getByText('1')).toBeInTheDocument()
+    })
+
+    it('should show toast if getCart return error', async () => {
+      getCart.mockRejectedValueOnce(new UnexpectedError())
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
     })
   })
 })
