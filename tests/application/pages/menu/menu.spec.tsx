@@ -98,7 +98,7 @@ describe('Menu', () => {
 
   describe('cart', () => {
     beforeAll(() => {
-      getCart.mockResolvedValue({ products: [{ available, description, categoryId, id, name: 'any_name', picture, price, categoryName: name, quantity: 2 }] })
+      getCart.mockResolvedValue({ products: [{ available, description, categoryId, id, name: 'any_name', picture, price, categoryName: name, quantity: 1 }] })
     })
 
     it('should call getCart when the screen is rendered', async () => {
@@ -118,7 +118,6 @@ describe('Menu', () => {
       await waitFor(() => screen.getByTestId('title-menu'))
       fireEvent.click(screen.getByTestId('cart'))
       expect(screen.getByText('any_name')).toBeInTheDocument()
-      expect(screen.getByText('1')).toBeInTheDocument()
     })
 
     it('should show toast if getCart return error', async () => {
@@ -146,7 +145,7 @@ describe('Menu', () => {
       fireEvent.click(screen.getByTestId('add-cart'))
       expect(addCartItem).toHaveBeenCalledWith({ id })
       expect(addCartItem).toHaveBeenCalledTimes(1)
-      expect(screen.getByText('3')).toBeInTheDocument()
+      expect(screen.getByText('2')).toBeInTheDocument()
       await waitFor(() => screen.getByText('any_name'))
     })
 
@@ -169,6 +168,19 @@ describe('Menu', () => {
       fireEvent.click(screen.getByTestId('delete-cart'))
       expect(deleteCartItem).toHaveBeenCalledWith({ id })
       expect(deleteCartItem).toHaveBeenCalledTimes(1)
+      await waitFor(() => screen.getByText('R$ 5,00'))
+    })
+
+    it('should remove product on cart when quantity is equal an one', async () => {
+      getCart.mockResolvedValueOnce({ products: [{ available, description, categoryId, id, name: 'any_name', picture, price, categoryName: name, quantity: 1 }] })
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('delete-cart'))
+      await waitFor(() => screen.getAllByText('R$ 5,00'))
+
+      expect(screen.getByTestId('itens').children).toHaveLength(0)
+      await waitFor(() => screen.getAllByText('R$ 5,00'))
     })
   })
 })
