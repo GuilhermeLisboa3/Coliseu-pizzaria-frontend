@@ -27,8 +27,8 @@ export function CartProvider ({ children, getCart, addCartItem, deleteCartItem }
     try {
       const addCart = cart!
       await addCartItem({ id: product.id })
-      const findProduct = cart!.findIndex(productCart => productCart.id === product.id)
-      if (findProduct >= 0) addCart[findProduct].quantity += 1
+      const findProductIndex = cart!.findIndex(productCart => productCart.id === product.id)
+      if (findProductIndex >= 0) addCart[findProductIndex].quantity += 1
       else addCart.push({ ...product, quantity: 1, categoryName })
       setCart([...addCart])
     } catch (error) {}
@@ -36,7 +36,12 @@ export function CartProvider ({ children, getCart, addCartItem, deleteCartItem }
 
   const handlerDeleteCartItem = async (id: string): Promise<void> => {
     try {
+      const deleteCart = cart!
       await deleteCartItem({ id })
+      const findProductIndex = cart!.findIndex(productCart => productCart.id === id)
+      if (deleteCart[findProductIndex].quantity <= 1) deleteCart.splice(findProductIndex, 1)
+      else deleteCart[findProductIndex].quantity -= 1
+      setCart([...deleteCart])
     } catch (error) {}
   }
   return <CartContext.Provider value={{ cart, addCartItem: handlerAddCartItem, deleteCartItem: handlerDeleteCartItem }}>{children}</CartContext.Provider>
