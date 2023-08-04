@@ -1,6 +1,6 @@
 import { productParams } from '@/tests/mocks'
 import { Menu } from '@/application/pages'
-import { AccountContext } from '@/application/contexts'
+import { AccountContext, CartProvider } from '@/application/contexts'
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
@@ -16,6 +16,7 @@ jest.mock('next/navigation', () => ({
 describe('Menu', () => {
   const { available, description, categoryId, id, name, picture, price } = productParams
   const listCategoryWithProducts = jest.fn()
+  const getCart = jest.fn()
   const setSpy = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
@@ -23,7 +24,9 @@ describe('Menu', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: jest.fn() }}>
-        <Menu listCategoryWithProducts={listCategoryWithProducts}/>
+        <CartProvider getCart={getCart}>
+          <Menu listCategoryWithProducts={listCategoryWithProducts}/>
+        </CartProvider>
       </AccountContext.Provider>
     )
   }
@@ -86,5 +89,16 @@ describe('Menu', () => {
 
     expect(setSpy).toHaveBeenCalledWith(undefined)
     expect(router.push).toHaveBeenCalledWith('/login')
+  })
+
+  describe('cart', () => {
+    it('should call getCart when the screen is rendered', async () => {
+      makeSut()
+
+      expect(getCart).toHaveBeenCalled()
+      expect(getCart).toHaveBeenCalledTimes(1)
+      await waitFor(() => screen.getByTestId('title-menu'))
+      expect(screen.queryByTestId('cart-item-length')).not.toBeInTheDocument()
+    })
   })
 })

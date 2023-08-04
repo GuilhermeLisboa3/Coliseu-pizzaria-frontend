@@ -1,6 +1,6 @@
 import { populateField, addressParams } from '@/tests/mocks'
 import { AddAddress } from '@/application/pages'
-import { AccountContext } from '@/application/contexts'
+import { AccountContext, CartProvider } from '@/application/contexts'
 import { type Validator } from '@/application/validation'
 import { FieldNotFoundError, UnexpectedError } from '@/domain/errors'
 
@@ -22,8 +22,10 @@ describe('AddAddress', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <ToastContainer/>
-        <AddAddress validation={validator} searchAddress={searchAddress} addAddress={addAddress}/>
+        <CartProvider getCart={jest.fn()}>
+          <ToastContainer/>
+          <AddAddress validation={validator} searchAddress={searchAddress} addAddress={addAddress}/>
+        </CartProvider>
       </AccountContext.Provider>
     )
   }

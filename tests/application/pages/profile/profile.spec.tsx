@@ -1,6 +1,6 @@
 import { addressParams, AccountParams, populateField } from '@/tests/mocks'
 import { Profile } from '@/application/pages'
-import { AccountContext } from '@/application/contexts'
+import { AccountContext, CartProvider } from '@/application/contexts'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 import { type Validator } from '@/application/validation'
 
@@ -31,8 +31,10 @@ describe('Profile', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
-        <ToastContainer/>
-        <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator} updateAddress={updateAddress}/>
+        <CartProvider getCart={jest.fn()}>
+          <ToastContainer/>
+          <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator} updateAddress={updateAddress}/>
+        </CartProvider>
       </AccountContext.Provider>
     )
   }
