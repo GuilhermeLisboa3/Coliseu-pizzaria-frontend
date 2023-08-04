@@ -19,7 +19,7 @@ export const Cart: React.FC<Props> = ({ isOpen, setIsOpen }): JSX.Element => {
       <HeaderCart>
         <FiArrowRight onClick={() => setIsOpen(!isOpen)}/>
       </HeaderCart>
-      <div className='itens'>
+      <div className='itens' data-testid='itens'>
         {
           cart
             ? cart.map(product => (<Product key={product.id} product={product}/>))

@@ -23,7 +23,16 @@ export function CartProvider ({ children, getCart, addCartItem }: ProviderProps)
   }, [])
 
   const handlerAddCartItem = async (product: Product, categoryName: string): Promise<void> => {
-    await addCartItem({ id: product.id })
+    try {
+      const addCart = cart!
+      await addCartItem({ id: product.id })
+      const findProduct = cart!.findIndex(productCart => productCart.id === product.id)
+      if (findProduct >= 0) addCart[findProduct].quantity += 1
+      else addCart.push({ ...product, quantity: 1, categoryName })
+      setCart([...addCart])
+    } catch (error) {
+
+    }
   }
   return <CartContext.Provider value={{ cart, addCartItem: handlerAddCartItem }}>{children}</CartContext.Provider>
 }
