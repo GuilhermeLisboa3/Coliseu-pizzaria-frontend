@@ -1,13 +1,14 @@
-import { type Cart } from '@/application/contexts'
+import { CartContext, type Cart } from '@/application/contexts'
 import { Container } from './style'
 import { formatPrice } from '@/application/utils'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from 'react-icons/io'
 
 export type Props = { product: Cart }
 
 export const Product: React.FC<Props> = ({ product }): JSX.Element => {
+  const { addCartItem } = useContext(CartContext)
   return (
   <Container>
     <aside>
@@ -20,7 +21,7 @@ export const Product: React.FC<Props> = ({ product }): JSX.Element => {
     <div>
       <IoMdRemoveCircleOutline/>
       <span>{ product.quantity }</span>
-      <IoMdAddCircleOutline/>
+      <IoMdAddCircleOutline onClick={() => { addCartItem(product, product.categoryName) }} data-testid='add-cart'/>
     </div>
   </Container>
   )
