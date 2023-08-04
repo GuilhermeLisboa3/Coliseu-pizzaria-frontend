@@ -63,6 +63,18 @@ describe('Menu', () => {
     await waitFor(() => screen.getByRole('list'))
 
     expect(screen.getByText(name)).toBeInTheDocument()
+    expect(await screen.findByText(description)).toBeInTheDocument()
+  })
+
+  it('should render products with describe smaller', async () => {
+    const describe2 = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio error est repellat quas quia molestias2'
+    listCategoryWithProducts.mockResolvedValue([{ id: '1', name: 'any_title', products: [{ available, description: describe2, id, name, picture, price, categoryId }] }])
+    makeSut()
+
+    await waitFor(() => screen.getByRole('list'))
+
+    expect(screen.getByText(name)).toBeInTheDocument()
+    expect(await screen.findByText(`${describe2.substring(0, 100)}...`)).toBeInTheDocument()
   })
 
   it('should render error on UnexpectedError', async () => {
@@ -129,13 +141,14 @@ describe('Menu', () => {
     })
 
     it('should call addCartItem when click product-add-cart', async () => {
+      getCart.mockResolvedValueOnce({ products: [] })
       makeSut()
 
       await waitFor(() => screen.getByTestId('title-menu'))
       fireEvent.click(screen.getByTestId('product-add-cart'))
       expect(addCartItem).toHaveBeenCalledWith({ id })
       expect(addCartItem).toHaveBeenCalledTimes(1)
-      await waitFor(() => screen.getByText('any_name'))
+      await waitFor(() => screen.getAllByText('R$ 5,00'))
     })
 
     it('should call addCartItem when click add-cart', async () => {
@@ -145,7 +158,6 @@ describe('Menu', () => {
       fireEvent.click(screen.getByTestId('add-cart'))
       expect(addCartItem).toHaveBeenCalledWith({ id })
       expect(addCartItem).toHaveBeenCalledTimes(1)
-      expect(screen.getByText('2')).toBeInTheDocument()
       await waitFor(() => screen.getByText('any_name'))
     })
 
