@@ -4,6 +4,7 @@ module.exports = {
     '!<rootDir>/src/app/**',
     '!<rootDir>/src/main/**',
     '!<rootDir>/src/application/components/header/**',
+    '!<rootDir>/src/application/pages/home/**',
     '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/**/style.ts'
   ],

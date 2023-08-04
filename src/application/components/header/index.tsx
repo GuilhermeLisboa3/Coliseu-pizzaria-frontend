@@ -1,8 +1,9 @@
 'use client'
 import { Container, Section } from './style'
 import logo from '@/application/assets/logo.png'
+import { CartContext } from '@/application/contexts'
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Link from 'next/link'
 import { AiOutlineUser, AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
 import { PiShoppingCartSimple } from 'react-icons/pi'
@@ -10,6 +11,7 @@ import { usePathname } from 'next/navigation'
 import { Cart } from '../cart'
 
 export const Header: React.FC = (): JSX.Element => {
+  const { cart } = useContext(CartContext)
   const path = usePathname()
   const pathName = (pathname: string): string => path === pathname ? 'active' : ''
   const [visible, setVisible] = useState(false)
@@ -29,7 +31,11 @@ export const Header: React.FC = (): JSX.Element => {
           <Link href={'#'}>
             <div>
               <PiShoppingCartSimple/>
-              <span>4</span>
+              {
+                cart.length > 0
+                  ? <span data-testid='cart-item-length'>{cart.length}</span>
+                  : ''
+              }
             </div>
           </Link>
           <Link href={'/profile'}><AiOutlineUser/></Link>
