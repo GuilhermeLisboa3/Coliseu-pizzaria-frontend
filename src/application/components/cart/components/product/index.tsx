@@ -8,7 +8,7 @@ import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from 'react-icons/io'
 export type Props = { product: Cart }
 
 export const Product: React.FC<Props> = ({ product }): JSX.Element => {
-  const { addCartItem } = useContext(CartContext)
+  const { addCartItem, deleteCartItem } = useContext(CartContext)
   return (
   <Container>
     <aside>
@@ -19,7 +19,7 @@ export const Product: React.FC<Props> = ({ product }): JSX.Element => {
       <span>{ formatPrice(product.price) }</span>
     </section>
     <div>
-      <IoMdRemoveCircleOutline/>
+      <IoMdRemoveCircleOutline onClick={() => { deleteCartItem(product.id) }} data-testid='delete-cart'/>
       <span>{ product.quantity }</span>
       <IoMdAddCircleOutline onClick={() => { addCartItem(product, product.categoryName) }} data-testid='add-cart'/>
     </div>
