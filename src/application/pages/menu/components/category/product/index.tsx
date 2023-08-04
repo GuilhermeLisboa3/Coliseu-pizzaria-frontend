@@ -1,13 +1,16 @@
+'use client'
 import { Container } from './style'
+import { type Product as ProductModel } from '@/domain/models'
+import { CartContext } from '@/application/contexts'
+import { formatPrice } from '@/application/utils'
 
 import { PiShoppingCartSimple } from 'react-icons/pi'
-import React from 'react'
-import { type Product as ProductModel } from '@/domain/models'
-import { formatPrice } from '@/application/utils'
+import React, { useContext } from 'react'
 
 type Props = { product: ProductModel, categoryName: string }
 
 export const Product: React.FC<Props> = ({ product, categoryName }): JSX.Element => {
+  const { addCartItem } = useContext(CartContext)
   return (
     <Container>
       <section>
@@ -17,7 +20,7 @@ export const Product: React.FC<Props> = ({ product, categoryName }): JSX.Element
         <p>{ product.description.length > 100 ? `${product.description.substring(0, 100)}...` : product.description}</p>
         <p>{formatPrice(product.price)}</p>
       </section>
-      <span><PiShoppingCartSimple/></span>
+      <span onClick={() => { addCartItem(product, categoryName) }} data-testid='product-add-cart'><PiShoppingCartSimple/></span>
     </Container>
   )
 }
