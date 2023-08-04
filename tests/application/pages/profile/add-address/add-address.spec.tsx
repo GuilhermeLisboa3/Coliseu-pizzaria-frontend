@@ -16,24 +16,27 @@ describe('AddAddress', () => {
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
   const searchAddress = jest.fn()
+  const getCart = jest.fn()
   const addAddress = jest.fn()
   const validator = mock<Validator>()
+
+  beforeAll(() => {
+    validator.validate.mockReturnValue('')
+    getCart.mockResolvedValue({ products: [] })
+    useRouter.mockReturnValue(router)
+    searchAddress.mockResolvedValue({ neighborhood, street })
+  })
 
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: jest.fn(), getCurrentAccount: jest.fn() }}>
-        <CartProvider getCart={jest.fn()}>
+        <CartProvider getCart={getCart}>
           <ToastContainer/>
           <AddAddress validation={validator} searchAddress={searchAddress} addAddress={addAddress}/>
         </CartProvider>
       </AccountContext.Provider>
     )
   }
-
-  beforeAll(() => {
-    useRouter.mockReturnValue(router)
-    searchAddress.mockResolvedValue({ neighborhood, street })
-  })
 
   const populateSearchFormFields = (): void => {
     populateField('cep', zipCode)
@@ -65,23 +68,26 @@ describe('AddAddress', () => {
     expect(screen.getByTestId('cep')).toBeInTheDocument()
     expect(screen.queryByTestId('surname')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
+    await waitFor(() => screen.getByTestId('cep'))
   })
 
-  it('should call validation with correct values', () => {
+  it('should call validation with correct values', async () => {
     makeSut()
 
     populateSearchFormFields()
 
     expect(validator.validate).toHaveBeenCalledWith('zipCode', { zipCode })
+    await waitFor(() => screen.getByTestId('cep'))
   })
 
-  it('should disable button if form if Validation fails', () => {
+  it('should disable button if form if Validation fails', async () => {
     makeSut()
     validator.validate.mockReturnValueOnce(error)
 
     populateSearchFormFields()
 
     expect(screen.getByRole('button', { name: 'Buscar' })).toBeDisabled()
+    await waitFor(() => screen.getByTestId('cep'))
   })
 
   it('should call searchAddress with correct values', async () => {
@@ -102,10 +108,11 @@ describe('AddAddress', () => {
     await waitFor(() => screen.getByTestId('add-form'))
   })
 
-  it('should not call searchAddress if validation fails', () => {
+  it('should not call searchAddress if validation fails', async () => {
     makeSut()
     validator.validate.mockReturnValueOnce(error)
 
+    await waitFor(() => screen.getByTestId('cep'))
     populateSearchFormFields()
     fireEvent.submit(screen.getByTestId('search-form'))
 

@@ -33,6 +33,7 @@ describe('Menu', () => {
 
   beforeAll(() => {
     useRouter.mockReturnValue(router)
+    getCart.mockResolvedValue({ products: [] })
     listCategoryWithProducts.mockResolvedValue([{ id: '1', name: 'any_title', products: [{ available, description, id, name, picture, price, categoryId }] }])
   })
 
@@ -92,13 +93,28 @@ describe('Menu', () => {
   })
 
   describe('cart', () => {
+    beforeAll(() => {
+      getCart.mockResolvedValue({ products: [{ available, description, categoryId, id, name: 'any_name', picture, price, categoryName: name, quantity: 2 }] })
+    })
+
     it('should call getCart when the screen is rendered', async () => {
+      getCart.mockResolvedValueOnce({ products: [] })
       makeSut()
 
+      expect(screen.getByTestId('skeleton-cart-item')).toBeInTheDocument()
       expect(getCart).toHaveBeenCalled()
       expect(getCart).toHaveBeenCalledTimes(1)
       await waitFor(() => screen.getByTestId('title-menu'))
       expect(screen.queryByTestId('cart-item-length')).not.toBeInTheDocument()
+    })
+
+    it('should show the products when you click on the cart', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('cart'))
+      expect(screen.getByText('any_name')).toBeInTheDocument()
+      expect(screen.getByText('1')).toBeInTheDocument()
     })
   })
 })

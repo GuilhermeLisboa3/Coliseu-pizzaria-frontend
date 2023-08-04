@@ -14,7 +14,7 @@ describe('getCartUseCase', () => {
   beforeAll(() => {
     httpClient.request.mockResolvedValue({
       statusCode: 200,
-      data: { id, accountId: id, products: [{ id, available, categoryId, description, name, picture, price, quantity: 2 }] }
+      data: { id, accountId: id, products: [{ id, available, categoryId, description, name, picture, price, quantity: 2, categoryName: name }] }
     })
   })
 
@@ -48,6 +48,6 @@ describe('getCartUseCase', () => {
   it('should return cart with products on success', async () => {
     const result = await sut()
 
-    expect(result).toEqual({ id, accountId: id, products: [{ id, available, categoryId, description, name, picture, price, quantity: 2 }] })
+    expect(result).toEqual({ id, accountId: id, products: [{ id, available, categoryId, description, name, picture, price, quantity: 2, categoryName: name }] })
   })
 })

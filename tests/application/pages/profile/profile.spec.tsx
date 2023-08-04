@@ -22,6 +22,7 @@ describe('Profile', () => {
   const updateAddress = jest.fn()
   const getSpy = jest.fn()
   const setSpy = jest.fn()
+  const getCart = jest.fn()
   const useRouter = jest.spyOn(require('next/navigation'), 'useRouter')
   const router = { push: jest.fn() }
   const { surname, complement, neighborhood, street, zipCode, number, id, error } = addressParams
@@ -31,7 +32,7 @@ describe('Profile', () => {
   const makeSut = (): void => {
     render(
       <AccountContext.Provider value={{ setCurrentAccount: setSpy, getCurrentAccount: getSpy }}>
-        <CartProvider getCart={jest.fn()}>
+        <CartProvider getCart={getCart}>
           <ToastContainer/>
           <Profile listAddresses={listAddresses} deleteAddress={deleteAddress} validation={validator} updateAddress={updateAddress}/>
         </CartProvider>
@@ -41,6 +42,7 @@ describe('Profile', () => {
 
   beforeAll(() => {
     useRouter.mockReturnValue(router)
+    getCart.mockResolvedValue({ products: [] })
     listAddresses.mockResolvedValue([{ surname, complement, neighborhood, street, zipCode, number, id, active: true }])
     getSpy.mockReturnValue({ name, accessToken })
   })
