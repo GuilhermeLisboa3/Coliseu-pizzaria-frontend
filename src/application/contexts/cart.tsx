@@ -1,6 +1,7 @@
 import { type GetCart } from '@/domain/use-cases/cart'
 
 import React, { createContext, type ReactNode, useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 export type Cart = { id: string, name: string, description: string, price: number, available: string, picture: string, categoryId: string, quantity: number, categoryName: string }
 
@@ -15,7 +16,7 @@ type ProviderProps = { children: ReactNode, getCart: GetCart }
 export function CartProvider ({ children, getCart }: ProviderProps): any {
   const [cart, setCart] = useState<Cart[] | undefined>(undefined)
   useEffect(() => {
-    getCart().then(cart => setCart(cart.products))
+    getCart().then(cart => setCart(cart.products)).catch((error: any) => toast.error(error.message))
   }, [])
   return <CartContext.Provider value={{ cart }}>{children}</CartContext.Provider>
 }
