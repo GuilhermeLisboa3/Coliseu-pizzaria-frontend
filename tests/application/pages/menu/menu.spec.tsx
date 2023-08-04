@@ -135,6 +135,19 @@ describe('Menu', () => {
       fireEvent.click(screen.getByTestId('product-add-cart'))
       expect(addCartItem).toHaveBeenCalledWith({ id })
       expect(addCartItem).toHaveBeenCalledTimes(1)
+      await waitFor(() => screen.getByText('any_name'))
+    })
+
+    it('should not add duplicated product on cart', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('product-add-cart'))
+      fireEvent.click(screen.getByTestId('product-add-cart'))
+      fireEvent.click(screen.getByTestId('cart'))
+
+      expect(screen.getByTestId('itens').children).toHaveLength(1)
+      await waitFor(() => screen.getByText('any_name'))
     })
   })
 })
