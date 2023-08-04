@@ -15,6 +15,7 @@ export const Header: React.FC = (): JSX.Element => {
   const path = usePathname()
   const pathName = (pathname: string): string => path === pathname ? 'active' : ''
   const [visible, setVisible] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   return (
   <>
     <Container $bgColor={path === '/'}>
@@ -29,10 +30,10 @@ export const Header: React.FC = (): JSX.Element => {
         </nav>
         <div>
           <Link href={'#'}>
-            <div>
+            <div onClick={() => setIsOpen(!isOpen)} data-testid='cart'>
               <PiShoppingCartSimple/>
               {
-                cart.length > 0
+                cart && cart.length > 0
                   ? <span data-testid='cart-item-length'>{cart.length}</span>
                   : ''
               }
@@ -42,7 +43,7 @@ export const Header: React.FC = (): JSX.Element => {
         </div>
       </Section>
     </Container>
-    <Cart/>
+    <Cart isOpen={isOpen} setIsOpen={setIsOpen}/>
   </>
   )
 }

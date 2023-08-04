@@ -1,9 +1,12 @@
 import { type HttpClient } from '@/domain/contracts/http'
-import { type Cart } from '@/domain/models'
 import { UnauthorizedError, UnexpectedError } from '@/domain/errors'
 
-type Setup = (url: string, httpClient: HttpClient<Cart>) => GetCart
-type Output = Cart
+type Setup = (url: string, httpClient: HttpClient<Output>) => GetCart
+type Output = {
+  id: string
+  accountId: string
+  products: Array<{ id: string, name: string, description: string, price: number, available: string, picture: string, categoryId: string, quantity: number, categoryName: string }>
+}
 export type GetCart = () => Promise<Output>
 
 export const getCartUseCase: Setup = (url, httpClient) => async () => {

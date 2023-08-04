@@ -1,21 +1,25 @@
+import { type Cart } from '@/application/contexts'
 import { Container } from './style'
+import { formatPrice } from '@/application/utils'
 
 import React from 'react'
 import { IoMdRemoveCircleOutline, IoMdAddCircleOutline } from 'react-icons/io'
 
-export const Product: React.FC = (): JSX.Element => {
+export type Props = { product: Cart }
+
+export const Product: React.FC<Props> = ({ product }): JSX.Element => {
   return (
   <Container>
     <aside>
-      <img src="https://fast-food.s3.amazonaws.com/59445d5c-e73f-4d7c-a2e5-30d61ce5aa18.png" className='Bebidas' alt="" />
+      <img src={ product.picture } className={product.categoryName} alt={product.name} />
     </aside>
     <section>
-      <p>Peperoni</p>
-      <span>R$ 40,00</span>
+      <p>{ product.name }</p>
+      <span>{ formatPrice(product.price) }</span>
     </section>
     <div>
       <IoMdRemoveCircleOutline/>
-      <span>8</span>
+      <span>{ product.quantity }</span>
       <IoMdAddCircleOutline/>
     </div>
   </Container>

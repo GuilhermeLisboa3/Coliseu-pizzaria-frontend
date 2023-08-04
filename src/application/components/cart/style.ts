@@ -2,8 +2,8 @@
 import styled from 'styled-components'
 import { colors } from '@/application/styles'
 
-export const Container = styled.div<{ $open: boolean }>`
-  width: ${props => props.$open ? '400px' : '0'};
+export const Container = styled.div<{ $isOpen: boolean }>`
+  width: ${props => props.$isOpen ? '400px' : '0'};
   overflow: hidden;
   height: 100%;
   position: fixed;
@@ -28,7 +28,7 @@ export const Container = styled.div<{ $open: boolean }>`
   }
 
   @media (max-width: 375px) {
-    width: ${props => props.$open ? '100%' : '0'};
+    width: ${props => props.$isOpen ? '100%' : '0'};
   }
 `
 

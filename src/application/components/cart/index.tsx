@@ -1,34 +1,44 @@
 import { Container, FooterCart, HeaderCart } from './style'
 import { Button } from '@/application/components'
+import { CartContext } from '@/application/contexts'
 import { Product, Skeleton } from './components'
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { FiArrowRight } from 'react-icons/fi'
+import { formatPrice } from '@/application/utils'
 
-export const Cart: React.FC = (): JSX.Element => {
+type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }
+
+export const Cart: React.FC<Props> = ({ isOpen, setIsOpen }): JSX.Element => {
+  const { cart } = useContext(CartContext)
+  const subtotal = cart ? cart.reduce((total, { quantity, price }) => total + price * quantity, 0) : 0
+  const deliveryFee = 5
+  const total = subtotal + deliveryFee
   return (
-    <Container $open={true}>
+    <Container $isOpen={isOpen}>
       <HeaderCart>
-        <FiArrowRight/>
+        <FiArrowRight onClick={() => setIsOpen(!isOpen)}/>
       </HeaderCart>
       <div className='itens'>
-        <Product/>
-        <Product/>
-        <Skeleton/>
+        {
+          cart
+            ? cart.map(product => (<Product key={product.id} product={product}/>))
+            : <Skeleton/>
+        }
       </div>
       <FooterCart>
         <div>
           <p>subtotal</p>
-          <p>R$ 40,00</p>
+          <p>{ formatPrice(subtotal) }</p>
         </div>
         <div>
           <p>Taxa de entrega</p>
-          <p>R$ 5,00</p>
+          <p>{ formatPrice(deliveryFee) }</p>
         </div>
         <hr />
         <div>
           <p>Total</p>
-          <p>R$ 45,00</p>
+          <p>{ formatPrice(total) }</p>
         </div>
         <Button>Comprar</Button>
       </FooterCart>
