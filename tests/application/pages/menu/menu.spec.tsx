@@ -182,5 +182,13 @@ describe('Menu', () => {
       expect(screen.getByTestId('itens').children).toHaveLength(0)
       await waitFor(() => screen.getAllByText('R$ 5,00'))
     })
+
+    it('should close cart', async () => {
+      makeSut()
+
+      await waitFor(() => screen.getByRole('list'))
+      fireEvent.click(screen.getByTestId('cart'))
+      fireEvent.click(screen.getByTestId('close-cart'))
+    })
   })
 })

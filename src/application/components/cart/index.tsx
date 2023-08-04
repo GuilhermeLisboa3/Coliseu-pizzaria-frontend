@@ -17,7 +17,7 @@ export const Cart: React.FC<Props> = ({ isOpen, setIsOpen }): JSX.Element => {
   return (
     <Container $isOpen={isOpen}>
       <HeaderCart>
-        <FiArrowRight onClick={() => setIsOpen(!isOpen)}/>
+        <FiArrowRight onClick={() => setIsOpen(!isOpen)} data-testid='close-cart'/>
       </HeaderCart>
       <div className='itens' data-testid='itens'>
         {
