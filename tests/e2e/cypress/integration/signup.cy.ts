@@ -62,6 +62,14 @@ describe('Signup', () => {
     cy.testUrl('/signup')
   })
 
+  it('should not call submit if form is invalid', () => {
+    mockSuccess()
+
+    cy.getInputById('email').focus().type(validEmail).type('{enter}')
+
+    cy.get('@request.all').should('have.length', 0)
+  })
+
   it('should redirect login on success', () => {
     mockSuccess()
 
