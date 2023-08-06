@@ -13,6 +13,7 @@
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-confusing-void-expression": "off",
     "@typescript-eslint/no-floating-promises": "off",
+    "cypress/unsafe-to-chain-command": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@next/next/no-img-element": "off",
     "react/jsx-uses-react": "error",
