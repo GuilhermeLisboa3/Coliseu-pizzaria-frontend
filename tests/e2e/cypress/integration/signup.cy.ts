@@ -1,3 +1,5 @@
+import { mockBadRequestError } from '../mocks/http-mocks'
+
 import faker from 'faker'
 
 describe('Signup', () => {
@@ -7,11 +9,18 @@ describe('Signup', () => {
   const invalidPasswordConfirmation: string = faker.internet.password(16)
   const name: string = faker.name.findName()
 
+  const mockError = (method: any): void => method('POST', /signup/)
+
   const populateFields = (email = validEmail, passwordConfirmation = password): void => {
     cy.getByTestId('name').focus().type(name)
     cy.getByTestId('email').focus().type(email)
     cy.getByTestId('password').focus().type(password)
     cy.getByTestId('passwordConfirmation').focus().type(passwordConfirmation)
+  }
+
+  const simulateSubmit = (): void => {
+    populateFields()
+    cy.getSubmitButton().click()
   }
 
   beforeEach(() => {
@@ -32,5 +41,14 @@ describe('Signup', () => {
     populateFields()
 
     cy.getSubmitButton().should('be.enabled')
+  })
+
+  it('should present FieldInUseError on 400', () => {
+    mockError(mockBadRequestError)
+
+    simulateSubmit()
+
+    cy.contains('O email já está em uso!')
+    cy.testUrl('/signup')
   })
 })
