@@ -49,7 +49,9 @@ export const Login: React.FC<Props> = ({ validation, authentication }): JSX.Elem
             <img src={imgLogin.src} alt="" />
           </aside>
           <div>
-            <img src={logo.src} alt="logo" />
+            <Link href={'/'}>
+              <img src={logo.src} alt="logo" />
+            </Link>
             <form onSubmit={handleSubmit} data-testid='form'>
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>
               <Input placeholder="Senha" type='password' name='password' setState={setPassword}/>

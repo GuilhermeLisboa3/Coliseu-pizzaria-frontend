@@ -4,5 +4,5 @@ import { makeAddAddress, makeSearchAddress } from '@/main/factories/domain/use-c
 import { makeAddAddressValidation } from '@/main/factories/application/validation'
 
 export const MakeAddAddress: React.FC = () => (
-  <AddAddress validation={makeAddAddressValidation()} addAddress={makeAddAddress()} searchAddress={makeSearchAddress()}/>
+    <AddAddress validation={makeAddAddressValidation()} addAddress={makeAddAddress()} searchAddress={makeSearchAddress()}/>
 )

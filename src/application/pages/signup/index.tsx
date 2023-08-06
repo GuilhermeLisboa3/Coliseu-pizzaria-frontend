@@ -52,7 +52,9 @@ export const SignUp: React.FC<Props> = ({ validation, addAccount }): JSX.Element
             <img src={imgSignup.src} alt="" />
           </aside>
           <div>
-            <img src={logo.src} alt="logo" />
+            <Link href={'/'}>
+              <img src={logo.src} alt="logo" />
+            </Link>
             <form onSubmit={handleSubmit} data-testid='form'>
               <Input placeholder="Name" type='text' name='name' setState={setName}/>
               <Input placeholder="Email" type='email' name='email' setState={setEmail}/>

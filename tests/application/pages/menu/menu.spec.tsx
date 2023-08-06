@@ -132,14 +132,6 @@ describe('Menu', () => {
       expect(screen.getByText('any_name')).toBeInTheDocument()
     })
 
-    it('should show toast if getCart return error', async () => {
-      getCart.mockRejectedValueOnce(new UnexpectedError())
-      makeSut()
-
-      await waitFor(() => screen.getByTestId('title-menu'))
-      expect(await screen.findByText(new UnexpectedError().message)).toBeInTheDocument()
-    })
-
     it('should call addCartItem when click product-add-cart', async () => {
       getCart.mockResolvedValueOnce({ products: [] })
       makeSut()

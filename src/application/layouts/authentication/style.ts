@@ -50,16 +50,22 @@ export const Container = styled.div`
     flex-direction: column;
     justify-content: center;
 
-    img {
-      width: 300px;
-      height: 160px;
-      margin: 0 auto;
-      cursor: pointer;
-      @media (max-width: 390px) {
-        width: 250px;
-        height: 130px;
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 300px;
+        height: 160px;
+        margin: 0 auto;
+        cursor: pointer;
+        @media (max-width: 390px) {
+          width: 250px;
+          height: 130px;
+        }
       }
     }
+
     form {
       width: 70%;
       margin: 0 auto;
@@ -86,6 +92,7 @@ export const Container = styled.div`
         }
 
         a {
+          display: inline;
           color: ${colors.redDark};
           font-weight: 500;
           cursor: pointer;

@@ -4,10 +4,10 @@ import { makeListAddresses, makeDeleteAddress, makeEditAddress } from '@/main/fa
 import { makeEditAddressValidation } from '@/main/factories/application/validation'
 
 export const MakeProfile: React.FC = () => (
-  <Profile
-  listAddresses={makeListAddresses()}
-  deleteAddress={makeDeleteAddress()}
-  validation={makeEditAddressValidation()}
-  updateAddress={makeEditAddress()}
-  />
+    <Profile
+    listAddresses={makeListAddresses()}
+    deleteAddress={makeDeleteAddress()}
+    validation={makeEditAddressValidation()}
+    updateAddress={makeEditAddress()}
+    />
 )

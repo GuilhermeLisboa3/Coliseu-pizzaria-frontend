@@ -6,9 +6,8 @@ import { Roboto } from 'next/font/google'
 import { GlobalStyle } from '@/application/styles'
 import { StyledComponentsRegistry } from '@/main/config'
 import { ToastContainer } from 'react-toastify'
-import { AccountContext, CartProvider } from '@/application/contexts'
+import { AccountContext } from '@/application/contexts'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adapters'
-import { makeAddCartItem, makeDeleteCartItem, makeGetCart } from '@/main/factories/domain/use-cases/cart'
 
 import React from 'react'
 
@@ -24,13 +23,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }): JSX.Element =>
     <html lang="pt-br" className={roboto.variable}>
         <body>
         <AccountContext.Provider value={{ setCurrentAccount: setCurrentAccountAdapter, getCurrentAccount: getCurrentAccountAdapter }}>
-          <CartProvider getCart={makeGetCart()} addCartItem={makeAddCartItem()} deleteCartItem={makeDeleteCartItem()}>
             <GlobalStyle/>
             <ToastContainer autoClose={3000} position='top-right' theme='colored'/>
             <StyledComponentsRegistry>
               { children }
             </StyledComponentsRegistry>
-          </CartProvider>
         </AccountContext.Provider>
         </body>
       </html>
