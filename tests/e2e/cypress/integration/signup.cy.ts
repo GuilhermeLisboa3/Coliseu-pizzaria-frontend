@@ -1,4 +1,4 @@
-import { mockBadRequestError, mockServerError } from '../mocks/http-mocks'
+import { mockBadRequestError, mockServerError, mockCreated } from '../mocks/http-mocks'
 
 import faker from 'faker'
 
@@ -10,12 +10,13 @@ describe('Signup', () => {
   const name: string = faker.name.findName()
 
   const mockError = (method: any): void => method('POST', /signup/)
+  const mockSuccess = (): void => mockCreated('POST', /signup/)
 
   const populateFields = (email = validEmail, passwordConfirmation = password): void => {
-    cy.getByTestId('name').focus().type(name)
-    cy.getByTestId('email').focus().type(email)
-    cy.getByTestId('password').focus().type(password)
-    cy.getByTestId('passwordConfirmation').focus().type(passwordConfirmation)
+    cy.getInputById('name').focus().type(name)
+    cy.getInputById('email').focus().type(email)
+    cy.getInputById('password').focus().type(password)
+    cy.getInputById('passwordConfirmation').focus().type(passwordConfirmation)
   }
 
   const simulateSubmit = (): void => {
@@ -59,5 +60,14 @@ describe('Signup', () => {
 
     cy.contains('Algo deu errado. Tente novamente!')
     cy.testUrl('/signup')
+  })
+
+  it('should redirect login on success', () => {
+    mockSuccess()
+
+    simulateSubmit()
+    cy.wait('@request')
+
+    cy.testUrl('/login')
   })
 })
