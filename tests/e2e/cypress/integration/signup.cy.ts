@@ -1,4 +1,4 @@
-import { mockBadRequestError } from '../mocks/http-mocks'
+import { mockBadRequestError, mockServerError } from '../mocks/http-mocks'
 
 import faker from 'faker'
 
@@ -49,6 +49,15 @@ describe('Signup', () => {
     simulateSubmit()
 
     cy.contains('O email já está em uso!')
+    cy.testUrl('/signup')
+  })
+
+  it('should present UnexpectedError on 500', () => {
+    mockError(mockServerError)
+
+    simulateSubmit()
+
+    cy.contains('Algo deu errado. Tente novamente!')
     cy.testUrl('/signup')
   })
 })
