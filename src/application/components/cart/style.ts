@@ -24,6 +24,15 @@ export const Container = styled.div<{ $isOpen: boolean }>`
     padding: 0px 20px 35px 15px;
     overflow-x: hidden;
     overflow-y: auto;
+
+    span.cart-empty {
+      height: 100%;
+      font-size: 1.6rem;
+      font-weight: bolder;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   @media (max-width: 375px) {

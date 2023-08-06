@@ -8,6 +8,7 @@ export type Cart = { id: string, name: string, description: string, price: numbe
 
 export type ContextProps = {
   cart: Cart[] | undefined
+  error: string
   addCartItem: (input: Product, categoryName: string) => Promise<void>
   deleteCartItem: (id: string) => Promise<void>
 }
@@ -18,8 +19,9 @@ type ProviderProps = { children: ReactNode, getCart: GetCart, addCartItem: AddCa
 
 export function CartProvider ({ children, getCart, addCartItem, deleteCartItem }: ProviderProps): any {
   const [cart, setCart] = useState<Cart[] | undefined>(undefined)
+  const [error, setError] = useState('')
   useEffect(() => {
-    getCart().then(cart => setCart(cart.products)).catch((error: any) => console.error(error.message))
+    getCart().then(cart => setCart(cart.products)).catch((error: any) => setError(error.message))
   }, [])
 
   const handlerAddCartItem = async (product: Product, categoryName: string): Promise<void> => {
@@ -43,5 +45,5 @@ export function CartProvider ({ children, getCart, addCartItem, deleteCartItem }
       setCart([...deleteCart])
     } catch (error) {}
   }
-  return <CartContext.Provider value={{ cart, addCartItem: handlerAddCartItem, deleteCartItem: handlerDeleteCartItem }}>{children}</CartContext.Provider>
+  return <CartContext.Provider value={{ cart, addCartItem: handlerAddCartItem, deleteCartItem: handlerDeleteCartItem, error }}>{children}</CartContext.Provider>
 }

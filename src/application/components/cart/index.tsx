@@ -10,9 +10,9 @@ import { formatPrice } from '@/application/utils'
 type Props = { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }
 
 export const Cart: React.FC<Props> = ({ isOpen, setIsOpen }): JSX.Element => {
-  const { cart } = useContext(CartContext)
+  const { cart, error } = useContext(CartContext)
   const subtotal = cart ? cart.reduce((total, { quantity, price }) => total + price * quantity, 0) : 0
-  const deliveryFee = 5
+  const deliveryFee = cart?.length ? 5 : 0
   const total = subtotal + deliveryFee
   return (
     <Container $isOpen={isOpen}>
@@ -21,9 +21,15 @@ export const Cart: React.FC<Props> = ({ isOpen, setIsOpen }): JSX.Element => {
       </HeaderCart>
       <div className='itens' data-testid='itens'>
         {
-          cart
-            ? cart.map(product => (<Product key={product.id} product={product}/>))
-            : <Skeleton/>
+          error || cart?.length === 0
+            ? <span className='cart-empty'>Carrinho vazio</span>
+            : <>
+                {
+                  cart
+                    ? cart.map(product => (<Product key={product.id} product={product}/>))
+                    : <Skeleton/>
+                }
+              </>
         }
       </div>
       <FooterCart>
