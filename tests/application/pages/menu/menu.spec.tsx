@@ -132,6 +132,15 @@ describe('Menu', () => {
       expect(screen.getByText('any_name')).toBeInTheDocument()
     })
 
+    it('should show mensagem cart empty if getCart return error', async () => {
+      getCart.mockRejectedValueOnce(new UnauthorizedError())
+      makeSut()
+
+      await waitFor(() => screen.getByTestId('title-menu'))
+      fireEvent.click(screen.getByTestId('cart'))
+      expect(screen.getByText('Carrinho vazio')).toBeInTheDocument()
+    })
+
     it('should call addCartItem when click product-add-cart', async () => {
       getCart.mockResolvedValueOnce({ products: [] })
       makeSut()
@@ -181,10 +190,11 @@ describe('Menu', () => {
 
       await waitFor(() => screen.getByTestId('title-menu'))
       fireEvent.click(screen.getByTestId('delete-cart'))
-      await waitFor(() => screen.getAllByText('R$ 5,00'))
+      await waitFor(() => screen.getByText('Carrinho vazio'))
 
-      expect(screen.getByTestId('itens').children).toHaveLength(0)
-      await waitFor(() => screen.getAllByText('R$ 5,00'))
+      expect(screen.getByText('Carrinho vazio')).toBeInTheDocument()
+      expect(screen.queryByText('R$ 5,00')).not.toBeInTheDocument()
+      await waitFor(() => screen.getByText('Carrinho vazio'))
     })
 
     it('should close cart', async () => {
