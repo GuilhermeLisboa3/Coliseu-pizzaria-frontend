@@ -6,9 +6,15 @@ describe('AddAddress', () => {
   const invalidZipCode = faker.address.zipCode('####')
 
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
+  const mockSuccessSearchForm = (): void => mockOk('GET', /address/, 'search-address')
 
   const populateSearchFormFields = (zipCode = validZipCode): void => {
     cy.getInputById('cep').focus().type(zipCode)
+  }
+
+  const simulateSearchFormSubmit = (): void => {
+    populateSearchFormFields()
+    cy.getSubmitButton().click()
   }
 
   beforeEach(() => {
@@ -40,5 +46,16 @@ describe('AddAddress', () => {
     populateSearchFormFields()
 
     cy.getSubmitButton().should('be.enabled')
+  })
+
+  it('should show form add if SearchAddress succeeds', () => {
+    cy.visit('profile/address')
+    mockSuccessCart()
+    mockSuccessSearchForm()
+
+    simulateSearchFormSubmit()
+    cy.wait('@request')
+
+    cy.getSubmitButton().should('be.disabled').should('have.text', 'Salvar')
   })
 })
