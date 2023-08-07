@@ -65,5 +65,19 @@ describe('menu', () => {
       cy.contains('R$ 30,00')
       cy.contains('R$ 10,00')
     })
+
+    it('should not add duplicated product on cart', () => {
+      mockSuccessCart()
+      mockSuccessCartItem()
+      mockSuccess()
+
+      cy.visit('menu')
+
+      cy.getByTestId('product-add-cart').click()
+      cy.getByTestId('product-add-cart').click()
+      cy.getByTestId('cart').click()
+
+      cy.contains('R$ 50,00')
+    })
   })
 })
