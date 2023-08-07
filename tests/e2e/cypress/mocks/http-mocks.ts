@@ -14,6 +14,13 @@ export const mockCreated = (method: string, url: RegExp, fixture?: string | obje
   ).as(alias)
 }
 
+export const mockNoContent = (method: string, url: RegExp, alias: string = 'request'): void => {
+  cy.intercept(
+    { method, url },
+    { delay: 50, statusCode: 204 }
+  ).as(alias)
+}
+
 const body = { error: faker.random.words() }
 
 export const mockBadRequestError = (method: string, url: RegExp, alias: string = 'request'): void => {

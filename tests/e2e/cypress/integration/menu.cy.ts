@@ -1,10 +1,11 @@
-import { mockOk, mockServerError } from '../mocks/http-mocks'
+import { mockNoContent, mockOk, mockServerError } from '../mocks/http-mocks'
 
 describe('menu', () => {
   const mockSuccess = (): void => mockOk('GET', /categories/, 'products')
   const mockError = (method: any): void => method('GET', /categories/)
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
-  const mockSuccessCartItem = (): void => mockOk('POST', /cart-item/)
+  const mockAddCartItem = (): void => mockOk('POST', /cart-item/)
+  const mockDeleteCartItem = (): void => mockNoContent('DELETE', /cart-item/)
 
   beforeEach(() => {
     cy.fixture('account').then(account => cy.setLocalStorageItem('account', account))
@@ -54,7 +55,7 @@ describe('menu', () => {
 
     it('should add product on cart', () => {
       mockSuccessCart()
-      mockSuccessCartItem()
+      mockAddCartItem()
       mockSuccess()
 
       cy.visit('menu')
@@ -68,7 +69,7 @@ describe('menu', () => {
 
     it('should not add duplicated product on cart', () => {
       mockSuccessCart()
-      mockSuccessCartItem()
+      mockAddCartItem()
       mockSuccess()
 
       cy.visit('menu')
@@ -78,6 +79,19 @@ describe('menu', () => {
       cy.getByTestId('cart').click()
 
       cy.contains('R$ 50,00')
+    })
+
+    it('should remove product on cart when quantity is equal an one', () => {
+      mockSuccessCart()
+      mockDeleteCartItem()
+      mockSuccess()
+
+      cy.visit('menu')
+
+      cy.getByTestId('cart').click()
+      cy.getByTestId('delete-cart').click()
+
+      cy.contains('Carrinho vazio')
     })
   })
 })
