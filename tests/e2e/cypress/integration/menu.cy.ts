@@ -4,6 +4,7 @@ describe('menu', () => {
   const mockSuccess = (): void => mockOk('GET', /categories/, 'products')
   const mockError = (method: any): void => method('GET', /categories/)
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
+  const mockSuccessCartItem = (): void => mockOk('POST', /cart-item/)
 
   beforeEach(() => {
     cy.fixture('account').then(account => cy.setLocalStorageItem('account', account))
@@ -49,6 +50,20 @@ describe('menu', () => {
 
       cy.getByTestId('cart').click()
       cy.getByTestId('close-cart').click()
+    })
+
+    it('should add product on cart', () => {
+      mockSuccessCart()
+      mockSuccessCartItem()
+      mockSuccess()
+
+      cy.visit('menu')
+
+      cy.getByTestId('product-add-cart').click()
+      cy.getByTestId('cart').click()
+
+      cy.contains('R$ 30,00')
+      cy.contains('R$ 10,00')
     })
   })
 })
