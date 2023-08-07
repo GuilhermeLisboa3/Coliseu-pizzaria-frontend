@@ -1,3 +1,5 @@
+import { mockUnauthorizedError } from '../mocks/http-mocks'
+
 import faker from 'faker'
 
 describe('login', () => {
@@ -5,9 +7,16 @@ describe('login', () => {
   const invalidEmail: string = faker.random.word()
   const password: string = faker.internet.password(8)
 
+  const mockError = (method: any): void => method('POST', /login/)
+
   const populateFields = (email = validEmail): void => {
     cy.getInputById('email').focus().type(email)
     cy.getInputById('password').focus().type(password)
+  }
+
+  const simulateSubmit = (): void => {
+    populateFields()
+    cy.getSubmitButton().click()
   }
 
   beforeEach(() => {
@@ -28,5 +37,14 @@ describe('login', () => {
     populateFields()
 
     cy.getSubmitButton().should('be.enabled')
+  })
+
+  it('should present UnauthorizedError on 401', () => {
+    mockError(mockUnauthorizedError)
+
+    simulateSubmit()
+
+    cy.contains('Credenciais inválidas')
+    cy.testUrl('/login')
   })
 })

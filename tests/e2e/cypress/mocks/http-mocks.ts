@@ -16,6 +16,13 @@ export const mockBadRequestError = (method: string, url: RegExp, alias: string =
   ).as(alias)
 }
 
+export const mockUnauthorizedError = (method: string, url: RegExp, alias: string = 'request'): void => {
+  cy.intercept(
+    { method, url },
+    { delay: 50, statusCode: 401, body }
+  ).as(alias)
+}
+
 export const mockServerError = (method: string, url: RegExp, alias: string = 'request'): void => {
   cy.intercept(
     { method, url },
