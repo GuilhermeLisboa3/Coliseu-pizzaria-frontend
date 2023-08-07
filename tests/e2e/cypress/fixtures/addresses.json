@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "surname": "any_surname",
+    "zipCode": "02258",
+    "neighborhood": "any_neighborhood",
+    "street": "any_street",
+    "number": 10,
+    "complement": "any_complement",
+    "active": true
+  }
+]

@@ -3,6 +3,7 @@ import { mockOk, mockServerError } from '../mocks/http-mocks'
 describe('Profile', () => {
   const mockError = (method: any): void => method('GET', /addresses/)
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
+  const mockSuccess = (): void => mockOk('GET', /addresses/, 'addresses')
   const visit = (): any => cy.visit('profile')
 
   beforeEach(() => {
@@ -27,5 +28,15 @@ describe('Profile', () => {
     cy.contains('Tentar novamente').click()
 
     cy.contains('Tentar novamente').should('not.be.exist')
+  })
+
+  it('should present addresses list', () => {
+    mockSuccessCart()
+    mockSuccess()
+
+    visit()
+
+    cy.getByTestId('skeletonAddress').should('have.length', 1)
+    cy.getByTestId('address').should('have.length', 1)
   })
 })
