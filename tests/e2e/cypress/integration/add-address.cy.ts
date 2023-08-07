@@ -32,4 +32,13 @@ describe('AddAddress', () => {
 
     cy.getSubmitButton().should('be.disabled')
   })
+
+  it('should enable the button if form is valid', () => {
+    mockSuccessCart()
+    cy.visit('profile/address')
+
+    populateSearchFormFields()
+
+    cy.getSubmitButton().should('be.enabled')
+  })
 })
