@@ -1,4 +1,4 @@
-import { mockServerError, mockUnauthorizedError } from '../mocks/http-mocks'
+import { mockServerError, mockUnauthorizedError, mockOk } from '../mocks/http-mocks'
 
 import faker from 'faker'
 
@@ -8,6 +8,7 @@ describe('login', () => {
   const password: string = faker.internet.password(8)
 
   const mockError = (method: any): void => method('POST', /login/)
+  const mockSuccess = (): void => mockOk('POST', /login/)
 
   const populateFields = (email = validEmail): void => {
     cy.getInputById('email').focus().type(email)
@@ -55,5 +56,13 @@ describe('login', () => {
 
     cy.contains('Algo deu errado. Tente novamente!')
     cy.testUrl('/login')
+  })
+
+  it('should not call submit if form is invalid', () => {
+    mockSuccess()
+
+    cy.getInputById('email').focus().type(validEmail).type('{enter}')
+
+    cy.get('@request.all').should('have.length', 0)
   })
 })
