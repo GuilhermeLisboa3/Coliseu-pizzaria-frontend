@@ -1,4 +1,4 @@
-import { mockUnauthorizedError } from '../mocks/http-mocks'
+import { mockServerError, mockUnauthorizedError } from '../mocks/http-mocks'
 
 import faker from 'faker'
 
@@ -45,6 +45,15 @@ describe('login', () => {
     simulateSubmit()
 
     cy.contains('Credenciais inválidas')
+    cy.testUrl('/login')
+  })
+
+  it('should present UnexpectedError on 500', () => {
+    mockError(mockServerError)
+
+    simulateSubmit()
+
+    cy.contains('Algo deu errado. Tente novamente!')
     cy.testUrl('/login')
   })
 })
