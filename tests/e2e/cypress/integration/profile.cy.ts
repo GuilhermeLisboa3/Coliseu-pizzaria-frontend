@@ -39,4 +39,16 @@ describe('Profile', () => {
     cy.getByTestId('skeletonAddress').should('have.length', 1)
     cy.getByTestId('address').should('have.length', 1)
   })
+
+  describe('edit', () => {
+    it('should load edit modal with correct initial state', () => {
+      mockSuccessCart()
+      mockSuccess()
+
+      visit()
+
+      cy.getByTestId('icon-edit').click()
+      cy.get('.react-modal').should('exist')
+    })
+  })
 })
