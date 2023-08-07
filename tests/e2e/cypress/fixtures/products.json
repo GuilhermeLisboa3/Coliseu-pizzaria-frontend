@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "name": "any_name",
+    "products": [
+      {
+        "id": "2",
+        "name": "any_name",
+        "description": "any_description",
+        "price": 10,
+        "available": true,
+        "picture": "any_url",
+        "categoryId": "2"
+      }
+    ]
+  }
+]
