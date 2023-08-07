@@ -1,7 +1,8 @@
-import { mockServerError } from '../mocks/http-mocks'
+import { mockOk, mockServerError } from '../mocks/http-mocks'
 
 describe('Profile', () => {
   const mockError = (method: any): void => method('GET', /addresses/)
+  const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
   const visit = (): any => cy.visit('profile')
 
   beforeEach(() => {
@@ -9,11 +10,22 @@ describe('Profile', () => {
   })
 
   it('should present error on UnexpectedError', () => {
+    mockSuccessCart()
     mockError(mockServerError)
 
     visit()
 
     cy.contains('Algo deu errado. Tente novamente!')
     cy.get('button').contains('Tentar novamente')
+  })
+
+  it('should reload on button click', () => {
+    mockSuccessCart()
+    mockError(mockServerError)
+
+    visit()
+    cy.contains('Tentar novamente').click()
+
+    cy.contains('Tentar novamente').should('not.be.exist')
   })
 })
