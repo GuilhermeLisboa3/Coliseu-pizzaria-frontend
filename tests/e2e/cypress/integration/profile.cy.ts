@@ -50,5 +50,16 @@ describe('Profile', () => {
       cy.getByTestId('icon-edit').click()
       cy.get('.react-modal').should('exist')
     })
+
+    it('should keep the button disabled if form is invalid', () => {
+      mockSuccessCart()
+      mockSuccess()
+
+      visit()
+      cy.getByTestId('icon-edit').click()
+      cy.getInputById('number').focus().clear()
+
+      cy.getSubmitButton().should('be.disabled')
+    })
   })
 })
