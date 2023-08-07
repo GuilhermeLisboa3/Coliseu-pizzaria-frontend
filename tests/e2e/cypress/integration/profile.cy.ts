@@ -1,4 +1,4 @@
-import { mockOk, mockServerError } from '../mocks/http-mocks'
+import { mockNoContent, mockOk, mockServerError } from '../mocks/http-mocks'
 
 import faker from 'faker'
 
@@ -6,6 +6,7 @@ describe('Profile', () => {
   const mockError = (method: any): void => method('GET', /addresses/)
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
   const mockSuccess = (): void => mockOk('GET', /addresses/, 'addresses')
+  const mockEditAddressSucess = (): void => mockNoContent('PUT', /address/, 'updateAddress')
   const visit = (): any => cy.visit('profile')
 
   beforeEach(() => {
@@ -90,6 +91,17 @@ describe('Profile', () => {
       simulateSubmit()
 
       cy.contains('Algo deu errado. Tente novamente!')
+    })
+
+    it('should close modal on success', () => {
+      mockSuccess()
+      mockEditAddressSucess()
+
+      visit()
+      simulateSubmit()
+      cy.wait('@updateAddress')
+
+      cy.get('form').should('not.exist')
     })
   })
 })

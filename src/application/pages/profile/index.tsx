@@ -33,7 +33,7 @@ export const Profile: React.FC<Props> = ({ listAddresses, deleteAddress, validat
 
   const handleReload = (): void => {
     setAddresses([])
-    setError(undefined)
+    setError('')
     setReload(!reload)
   }
 
