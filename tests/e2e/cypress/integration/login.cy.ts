@@ -23,4 +23,10 @@ describe('login', () => {
 
     cy.getSubmitButton().should('be.disabled')
   })
+
+  it('should enable the button if form is valid', () => {
+    populateFields()
+
+    cy.getSubmitButton().should('be.enabled')
+  })
 })
