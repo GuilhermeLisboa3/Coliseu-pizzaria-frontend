@@ -1,6 +1,6 @@
 import { mockOk, mockServerError } from '../mocks/http-mocks'
 
-describe('mmanu', () => {
+describe('menu', () => {
   const mockSuccess = (): void => mockOk('GET', /categories/, 'products')
   const mockError = (method: any): void => method('GET', /categories/)
   const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
@@ -30,6 +30,7 @@ describe('mmanu', () => {
   })
 
   it('should present categories list', () => {
+    mockSuccessCart()
     mockSuccess()
 
     cy.visit('menu')
@@ -37,5 +38,17 @@ describe('mmanu', () => {
     cy.get('ul').should('have.length', 2)
     cy.get('ul').should('have.length', 1)
     cy.get('li:not(:empty)').should('have.length', 1)
+  })
+
+  describe('cart', () => {
+    it('should close cart', () => {
+      mockSuccessCart()
+      mockSuccess()
+
+      cy.visit('menu')
+
+      cy.getByTestId('cart').click()
+      cy.getByTestId('close-cart').click()
+    })
   })
 })
