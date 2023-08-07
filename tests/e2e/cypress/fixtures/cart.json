@@ -1,0 +1,17 @@
+{
+  "id": "1",
+  "accountId": "2",
+  "products": [
+    {
+      "id": "3",
+      "name": "any_name",
+      "description": "any_description",
+      "price": 30,
+      "available": true,
+      "picture": "any_url",
+      "categoryId": "1",
+      "categoryName": "any_name",
+      "quantity": 1
+    }
+  ]
+}

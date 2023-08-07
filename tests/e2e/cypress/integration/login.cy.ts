@@ -8,7 +8,8 @@ describe('login', () => {
   const password: string = faker.internet.password(8)
 
   const mockError = (method: any): void => method('POST', /login/)
-  const mockSuccess = (): void => mockOk('POST', /login/)
+  const mockSuccess = (): void => mockOk('POST', /login/, 'account')
+  const mockSuccessCart = (): void => mockOk('POST', /cart/, 'cart')
 
   const populateFields = (email = validEmail): void => {
     cy.getInputById('email').focus().type(email)
@@ -64,5 +65,15 @@ describe('login', () => {
     cy.getInputById('email').focus().type(validEmail).type('{enter}')
 
     cy.get('@request.all').should('have.length', 0)
+  })
+
+  it('should store account on localStorage if valid credentials are provided', () => {
+    mockSuccess()
+    mockSuccessCart()
+
+    simulateSubmit()
+    cy.wait('@request')
+
+    cy.testLocalStorageItem('account')
   })
 })
