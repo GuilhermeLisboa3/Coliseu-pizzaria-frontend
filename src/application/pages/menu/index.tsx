@@ -20,6 +20,8 @@ export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element
   const handleError = useError(error => setError(error.message))
 
   const handleReload = (): void => {
+    setCategories([])
+    setError('')
     setReload(!reload)
   }
 

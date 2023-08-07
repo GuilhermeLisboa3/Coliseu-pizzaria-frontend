@@ -9,7 +9,7 @@ describe('login', () => {
 
   const mockError = (method: any): void => method('POST', /login/)
   const mockSuccess = (): void => mockOk('POST', /login/, 'account')
-  const mockSuccessCart = (): void => mockOk('POST', /cart/, 'cart')
+  const mockSuccessCart = (): void => mockOk('GET', /cart/, 'cart')
 
   const populateFields = (email = validEmail): void => {
     cy.getInputById('email').focus().type(email)
