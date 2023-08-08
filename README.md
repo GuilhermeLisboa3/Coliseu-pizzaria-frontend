@@ -59,8 +59,6 @@ Coliseu Pizzeria is a system created for a fast food, developed for study. with 
 01. Make a clone of this repository;
 00. Enter the folder by running `cd coliseu-pizzaria-frontend`;
 00. Run `npm install` to install dependencies;
-00. Rename the `.env.example` to file `.env`;
-00. Put your credentials inside the `.env`;
 00. Run `npm run dev` to start;
 
 <br />
