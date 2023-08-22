@@ -10,8 +10,10 @@ export class LocalStorageAdapter {
   }
 
   get ({ key }: GetStorage.Input): GetStorage.Output {
-    const value = localStorage.getItem(key)
+    if (typeof window !== 'undefined') {
+      const value = localStorage.getItem(key)
 
-    return JSON.parse(value!)
+      return JSON.parse(value!)
+    }
   }
 }

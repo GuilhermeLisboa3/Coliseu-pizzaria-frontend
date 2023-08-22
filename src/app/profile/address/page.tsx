@@ -7,11 +7,11 @@ import React from 'react'
 
 const Page = (): JSX.Element => {
   return (
+  <PrivateRoute>
     <CartProvider getCart={makeGetCart()} addCartItem={makeAddCartItem()} deleteCartItem={makeDeleteCartItem()}>
-      <PrivateRoute>
         <MakeAddAddress/>
-      </PrivateRoute>
     </CartProvider>
+  </PrivateRoute>
   )
 }
 
