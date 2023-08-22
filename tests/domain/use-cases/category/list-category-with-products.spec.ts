@@ -34,6 +34,14 @@ describe('listCategoryWithProductsUseCase', () => {
     await expect(promise).rejects.toThrow(new UnauthorizedError())
   })
 
+  it('should throw UnauthorizedError if HttpClient return 403', async () => {
+    httpClient.request.mockResolvedValueOnce({ statusCode: 403 })
+
+    const promise = sut()
+
+    await expect(promise).rejects.toThrow(new UnauthorizedError())
+  })
+
   it('should throw UnauthorizedError if HttpClient return 500', async () => {
     httpClient.request.mockResolvedValueOnce({ statusCode: 500 })
 

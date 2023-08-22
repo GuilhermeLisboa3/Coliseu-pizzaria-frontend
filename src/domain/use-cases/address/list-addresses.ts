@@ -11,6 +11,7 @@ export const listAddressesUseCase: Setup = (url, httpClient) => async () => {
   switch (statusCode) {
     case 200: return data!
     case 401: throw new UnauthorizedError()
+    case 403: throw new UnauthorizedError()
     default: throw new UnexpectedError()
   }
 }
