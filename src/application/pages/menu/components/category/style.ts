@@ -21,3 +21,15 @@ export const Container = styled.div`
     }
   }
 `
+
+export const NotProduct = styled.p`
+  height: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 0;
+`

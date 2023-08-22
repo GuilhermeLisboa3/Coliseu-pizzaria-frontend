@@ -14,13 +14,13 @@ type Props = {
 }
 
 export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element => {
-  const [categories, setCategories] = useState<Array<{ id: string, name: string, products: Product[] }>>([])
+  const [categories, setCategories] = useState<Array<{ id: string, name: string, products: Product[] }> | undefined>(undefined)
   const [reload, setReload] = useState(false)
   const [error, setError] = useState('')
   const handleError = useError(error => setError(error.message))
 
   const handleReload = (): void => {
-    setCategories([])
+    setCategories(undefined)
     setError('')
     setReload(!reload)
   }
@@ -38,7 +38,7 @@ export const Menu: React.FC<Props> = ({ listCategoryWithProducts }): JSX.Element
             error
               ? <Error error={error} reload={handleReload}/>
               : <>
-              { categories.length > 0
+              { categories
                 ? <Category categories={categories}/>
                 : <Skeleton/>
               }
