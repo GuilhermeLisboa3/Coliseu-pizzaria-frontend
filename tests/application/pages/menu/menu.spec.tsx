@@ -68,13 +68,20 @@ describe('Menu', () => {
 
   it('should render products with describe smaller', async () => {
     const describe2 = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio error est repellat quas quia molestias2'
-    listCategoryWithProducts.mockResolvedValue([{ id: '1', name: 'any_title', products: [{ available, description: describe2, id, name, picture, price, categoryId }] }])
+    listCategoryWithProducts.mockResolvedValueOnce([{ id: '1', name: 'any_title', products: [{ available, description: describe2, id, name, picture, price, categoryId }] }])
     makeSut()
 
     await waitFor(() => screen.getByRole('list'))
 
     expect(screen.getByText(name)).toBeInTheDocument()
     expect(await screen.findByText(`${describe2.substring(0, 100)}...`)).toBeInTheDocument()
+  })
+
+  it('should render message not product', async () => {
+    listCategoryWithProducts.mockResolvedValueOnce([])
+    makeSut()
+
+    expect(await screen.findByText('Não tem produtos, volte mais tarde.')).toBeInTheDocument()
   })
 
   it('should render error on UnexpectedError', async () => {
